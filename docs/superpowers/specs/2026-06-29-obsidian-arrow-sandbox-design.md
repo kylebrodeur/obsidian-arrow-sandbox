@@ -89,14 +89,14 @@ plugin runs (Electron renderer, client-only; view DOM built imperatively in
 ## Architecture
 
 Plain client-side single-page sandbox. No server, no SSR. Vite serves
-`index.html`, which loads the committed `public/app.css` and a TS entry that
-mounts an Arrow component into `#app`.
+`index.html`, which loads `public/app.css` (extracted locally via `pull-css`,
+git-ignored) and a TS entry that mounts an Arrow component into `#app`.
 
 ```
 obsidian-arrow-sandbox/
 ├── index.html                 # Obsidian body-class wrapper + app.css link + #app
 ├── public/
-│   └── app.css                # extracted from Obsidian (committed)
+│   └── app.css                # extracted from Obsidian via pull-css (git-ignored, not redistributed)
 ├── src/
 │   ├── main.ts                # mounts the baseline component into #app
 │   ├── sandbox/
@@ -167,8 +167,9 @@ contains `body.theme-dark`, `.theme-light`, `--text-accent`, `--size-4-4`,
 alignment of the data offset so the slice isn't a few bytes off.)
 
 CLI: `pnpm pull-css` (with `--path <asar>` override and an env-var fallback for
-non-default install locations). Output is committed so the sandbox runs without a
-local Obsidian present and the reconcile agent has the same styles.
+non-default install locations). Output is **git-ignored** — Obsidian's CSS is
+proprietary, so each developer extracts it from their own licensed install rather
+than us redistributing it. Run `pull-css` once before `pnpm dev`.
 
 **Option B — CDP capture (deferred, optional `--source cdp`):**
 Launch/attach to a running Obsidian via Chrome DevTools Protocol

@@ -27,20 +27,23 @@ never drifts. A freshly scaffolded project passes `pnpm run ci` out of the box.
 
 ```sh
 pnpm install
-pnpm pull-css     # extract Obsidian's app.css from the local install (committed)
+pnpm pull-css     # extract Obsidian's app.css from your local install (required)
 pnpm dev          # Vite dev server with HMR
 ```
 
 `pull-css` reads `app.css` out of `Obsidian.app/.../obsidian.asar` (macOS) and
 writes `public/app.css`. Override the location with `--path <obsidian.asar|app.css>`
-or `OBSIDIAN_ASAR=<path>`. The output is committed, so `pnpm dev` works without a
-local Obsidian present.
+or `OBSIDIAN_ASAR=<path>`. **Run it once before `pnpm dev`** — it needs a local
+Obsidian install.
+
+> **Why it isn't committed:** `public/app.css` is **git-ignored**. It's
+> Obsidian's proprietary stylesheet, so we don't redistribute it — each developer
+> extracts it from their own licensed Obsidian install via `pnpm pull-css`.
 
 > **Platform note:** automatic Obsidian discovery is currently **macOS-only** —
 > `pull-css` knows where `Obsidian.app` lives on macOS. Windows and WSL paths are
 > not auto-detected yet (planned). On those platforms, point the script at the
-> file explicitly via `--path <obsidian.asar|app.css>` or `OBSIDIAN_ASAR=<path>`,
-> or just rely on the committed `public/app.css`.
+> file explicitly via `--path <obsidian.asar|app.css>` or `OBSIDIAN_ASAR=<path>`.
 
 ## Scripts
 
@@ -65,6 +68,8 @@ under [`skills/`](skills/) — it doubles as a local skill marketplace:
 
 - `obsidian-arrow-sandbox` — running and using this sandbox, and porting to a plugin.
 - `arrow-js-obsidian-templates` — Arrow v1.0.6 template rules + footguns.
+- `arrow-js-obsidian-patterns` — integration patterns: icons (Lucide / data-icon
+  sweep), CSS scoping vs Obsidian globals, mount/unmount lifecycle, reactive state.
 
 Install them into your agent via the interactive TUI:
 

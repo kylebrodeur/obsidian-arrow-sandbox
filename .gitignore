@@ -1,3 +1,7 @@
 node_modules
 dist
 .DS_Store
+
+# Obsidian's app.css is proprietary — extract it locally with `pnpm pull-css`,
+# don't commit/redistribute it.
+public/app.css

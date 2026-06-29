@@ -26,7 +26,8 @@ pnpm pull-css     # macOS-only auto-detect; else --path <asar|css> / OBSIDIAN_AS
 pnpm dev          # Vite + HMR
 ```
 
-`public/app.css` is committed, so the sandbox runs without a local Obsidian.
+`public/app.css` is **git-ignored** (Obsidian's proprietary CSS — not
+redistributed); run `pnpm pull-css` once before `pnpm dev`.
 
 ## Arrow v1.0.6 footguns — READ BEFORE WRITING TEMPLATES
 

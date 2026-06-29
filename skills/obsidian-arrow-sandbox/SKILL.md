@@ -31,7 +31,8 @@ pnpm dev          # Vite + HMR; open the printed URL
 
 `pnpm pull-css` reads `app.css` out of `obsidian.asar`. macOS is auto-detected;
 elsewhere pass `--path <obsidian.asar|app.css>` or set `OBSIDIAN_ASAR=<path>`.
-`public/app.css` is committed, so `pnpm dev` works without a local Obsidian.
+`public/app.css` is **git-ignored** (Obsidian's proprietary CSS — not
+redistributed), so run `pnpm pull-css` once before `pnpm dev`.
 
 ## Build a component
 

@@ -10,6 +10,24 @@
 	"engines": {
 		"node": ">=18"
 	},
-	"keywords": ["obsidian", "arrow-js", "create", "scaffold", "template"],
-	"license": "MIT"
+	"keywords": [
+		"obsidian",
+		"obsidian-plugin",
+		"arrow-js",
+		"arrowjs",
+		"create",
+		"scaffold",
+		"template",
+		"ui",
+		"prototyping"
+	],
+	"author": "Kyle Brodeur",
+	"license": "MIT",
+	"homepage": "https://github.com/kylebrodeur/obsidian-arrow-sandbox#readme",
+	"bugs": "https://github.com/kylebrodeur/obsidian-arrow-sandbox/issues",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kylebrodeur/obsidian-arrow-sandbox.git",
+		"directory": "create-obsidian-arrow"
+	}
 }

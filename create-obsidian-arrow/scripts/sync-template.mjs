@@ -17,8 +17,17 @@ const pkgRoot = path.resolve(here, ".."); // create-obsidian-arrow/
 const repoRoot = path.resolve(pkgRoot, ".."); // sandbox root
 const templateDir = path.join(pkgRoot, "template");
 
-// Top-level entries never copied into the template.
-const EXCLUDE_TOP = new Set(["node_modules", "dist", ".git", "create-obsidian-arrow", ".DS_Store"]);
+// Top-level entries never copied into the template. `public` holds the
+// extracted (proprietary) app.css — scaffolded projects regenerate it with
+// `pnpm pull-css`, so we never vendor or redistribute it.
+const EXCLUDE_TOP = new Set([
+	"node_modules",
+	"dist",
+	".git",
+	"create-obsidian-arrow",
+	".DS_Store",
+	"public",
+]);
 
 function copyDir(src, dest, isRoot) {
 	fs.mkdirSync(dest, { recursive: true });
