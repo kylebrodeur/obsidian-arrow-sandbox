@@ -1,0 +1,48 @@
+/*
+ * Sandbox-only chrome. NOT ported into the plugin.
+ *
+ * Per the arrow-js-obsidian CSS-specificity lesson, every custom rule is scoped
+ * under a container class + element type so it can't lose to Obsidian's global
+ * rules (e.g. `button:not(.clickable-icon)`) and can't leak. All values use
+ * Obsidian tokens so the sandbox tracks the active theme.
+ */
+
+/* Make the page behave like an Obsidian pane viewport. */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+}
+
+#app {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: var(--background-secondary);
+}
+
+/* A sidebar-leaf-sized frame so component layouts read at realistic widths. */
+.oas-frame.workspace-leaf {
+  width: 100%;
+  max-width: 420px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-primary);
+  border-left: 1px solid var(--background-modifier-border);
+  border-right: 1px solid var(--background-modifier-border);
+}
+
+.oas-frame .oas-view-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--size-4-3);
+}
+
+.oas-frame .view-header .oas-theme-toggle {
+  font-size: var(--font-ui-medium);
+  line-height: 1;
+}

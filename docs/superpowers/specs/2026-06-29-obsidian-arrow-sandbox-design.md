@@ -21,8 +21,17 @@ component source is plugin-ready as-is.
 
 **In scope (baseline):**
 - Client-only Vite + TypeScript dev environment (`pnpm dev`).
-- `@arrow-js/core` only — `html` + `reactive`, mounted via `template(container)`.
-  This matches the plugin's current Arrow usage exactly.
+- `@arrow-js/core` **+ `@arrow-js/framework`** (client-side only). Core supplies
+  `reactive`, `html`, `component`, `watch`, `nextTick`; framework supplies
+  `boundary()` for async fallback sections. Mounted via `template(container)` —
+  the same call an Obsidian `ItemView.onOpen()` makes. **No `ssr`/`hydrate`.**
+- A deliberate **templates showcase** exercising Arrow's template features:
+  reactive `${() => …}` vs static `${…}`, attribute sync with `false`-removal
+  (`disabled="${() => …}"`), `.property` binding (`.checked`), `@event`
+  (`@click`), and keyed lists (`.key(id)`).
+- An async section wrapped in `boundary()` (fallback → resolved) so the baseline
+  itself **is** the framework evaluation — we can judge `boundary()` ergonomics
+  against plain reactive flags on real code.
 - `index.html` wrapped in Obsidian's body classes, loading the extracted
   `app.css` for full fidelity (tokens **and** semantic component classes).
 - A puller script that extracts `app.css` from the local Obsidian install.
@@ -31,14 +40,51 @@ component source is plugin-ready as-is.
 - A light/dark theme toggle for eyeballing both themes.
 
 **Out of scope (deferred, additive later):**
-- `@arrow-js/framework` + SSR/hydrate lane (the "should we upgrade the plugin?"
-  evaluation). The baseline is intentionally core-only; a framework lane can be
-  added later without reworking the baseline.
+- `@arrow-js/ssr` + `@arrow-js/hydrate` — **cut, not deferred.** See the Arrow
+  Layering decision record below for the reasoning.
 - Porting the full chat composer (`input.ts`, `message-feed`, `model-select`,
   …). The composer is the *next* component after the baseline proves out.
 - An `obsidian` API shim (`setIcon`, `Notice`, …). Not needed until we port a
   component that calls Obsidian APIs; the baseline uses none.
 - CDP-based token capture (see "Token sourcing", option B).
+
+## Decision record — Arrow layering
+
+Evidence from the installed `@arrow-js` packages (v1.0.6) + how an Obsidian
+plugin runs (Electron renderer, client-only; view DOM built imperatively in
+`ItemView.onOpen()`, no server, no server-rendered HTML to adopt):
+
+| Package | Key exports | Server needed? | Verdict |
+|---|---|---|---|
+| `core` (13.5KB min, 0 deps) | `reactive`, `html`, `component`, `watch`, `nextTick` | no | **Use** |
+| `framework` (client entry, 1.4KB, no jsdom) | `boundary()`, `render`, `toTemplate` | no | **Use** (client only) |
+| `framework/ssr` | server render runtime | yes (pulls **jsdom**, Node-only) | unused |
+| `ssr` | `renderToString`, `serializePayload` | yes | **Cut** |
+| `hydrate` (12.7KB) | `hydrate`, `readPayload` | yes (needs SSR output) | **Cut** |
+
+- **Cut `ssr` + `hydrate`:** they are a server→client pair. `renderToString`
+  needs a server to run on; `hydrate` needs server HTML + payload to adopt.
+  Obsidian has neither — `onOpen()` already builds the DOM client-side, so
+  `hydrate` would only add indirection over `template(container)`. The SSR path
+  also depends on `jsdom` (Node) and cannot sanely run in the renderer bundle.
+- **Use `framework` client-side:** its only client-relevant feature is
+  `boundary()` (async fallback). Client entry is tiny and does **not** import
+  jsdom, so it bundles cleanly into a plugin. Adopting it now makes the baseline
+  double as the "should the plugin upgrade?" evaluation, scoped to `boundary()`.
+- **Note:** `component()` lives in core, so reusable components don't require
+  framework. Porting a framework-using component to the plugin requires adding
+  `@arrow-js/framework` as a plugin dependency + the side-effect runtime import.
+
+## CSS scoping convention
+
+1. Components use **Obsidian's own semantic classes** (`.setting-item`,
+   `.clickable-icon`, `.workspace-leaf`, `.vertical-tab-nav-item`) and `var(--…)`
+   tokens first; add custom CSS only where Obsidian offers no class.
+2. Any custom CSS is **scoped under a container class + element type** (e.g.
+   `.oas-frame button.oas-theme-toggle`, specificity ≥ (0,2,1)) so it beats
+   Obsidian's global `button:not(.clickable-icon)` rule and never leaks — per the
+   `arrow-js-obsidian` skill's specificity lesson. Sandbox-only chrome lives in a
+   scoped `src/sandbox/sandbox.css`; component styling stays on Obsidian classes.
 
 ## Architecture
 
@@ -55,9 +101,12 @@ obsidian-arrow-sandbox/
 │   ├── main.ts                # mounts the baseline component into #app
 │   ├── sandbox/
 │   │   ├── frame.ts           # workspace-leaf frame + theme toggle chrome
-│   │   └── theme.ts           # flip body theme-dark/theme-light
+│   │   ├── theme.ts           # flip body theme-dark/theme-light
+│   │   └── sandbox.css        # scoped sandbox-only chrome styles
+│   ├── data/
+│   │   └── loadStatus.ts      # async data for the boundary() demo
 │   └── components/
-│       └── SettingsPanel.ts   # the baseline Arrow component
+│       └── SettingsPanel.ts   # the baseline Arrow component (+ boundary section)
 ├── scripts/
 │   └── pull-app-css.mjs       # extract app.css from local Obsidian install
 ├── docs/superpowers/specs/    # this spec
@@ -82,10 +131,12 @@ lookups in `app.css` don't resolve. `app.css` is loaded via `<link>` in `<head>`
 ### Component model
 
 ```ts
-import { html, reactive } from '@arrow-js/core'
+import '@arrow-js/framework'                    // side-effect: install framework runtime
+import { html, reactive, component } from '@arrow-js/core'
+import { boundary } from '@arrow-js/framework'  // async fallback boundary
 
 const state = reactive({ activeTab: 'general', developerMode: true })
-export const SettingsPanel = () => html`…`     // returns an Arrow template
+export const SettingsPanel = component(() => html`…`)   // returns an Arrow template
 
 // main.ts
 import { SettingsPanel } from './components/SettingsPanel'
