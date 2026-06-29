@@ -45,6 +45,11 @@ These are hard runtime errors, not style nits. They are encoded in CI
    is tracked and updates only that slot. Forgetting the `() =>` is the #1
    "why isn't it updating" bug. Returning `false` from an attribute expression
    **removes** the attribute (vs `""` which keeps it empty).
+4. **`@event` handlers must type the param `Event`, not a narrowed subtype.**
+   `(e: MouseEvent) => …` fails to assign to Arrow's handler type (parameter
+   contravariance) → `TS2345`. Use `(e: Event) => …` and narrow inside; no-arg
+   handlers are fine. (Caught by `tsc`; footguns 1–2 are caught by
+   `test/template-footguns.test.mjs`, which also flags this for inline handlers.)
 
 Other conventions: property binding via `.prop` (`.checked="${() => …}"`),
 events via `@event` (`@click="${fn}"`), keyed lists via

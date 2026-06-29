@@ -1,6 +1,6 @@
 ---
 name: arrow-js-obsidian-templates
-description: Use when writing @arrow-js/core (v1.0.6) html`` templates — the reactive-vs-static rule, full-value attribute binding (returning false removes the attribute), .property and @event binding, keyed lists, async component(fn, { fallback }) wrapped in boundary(), and the two hard footguns that throw "Invalid HTML position" at render (no literal HTML comments inside templates; an attribute expression must be the entire value).
+description: Use when writing @arrow-js/core (v1.0.6) html`` templates — the reactive-vs-static rule, full-value attribute binding (returning false removes the attribute), .property and @event binding, keyed lists, async component(fn, { fallback }) wrapped in boundary(), and the footguns: no literal HTML comments inside templates and no partial attribute values (both throw "Invalid HTML position" at render), plus @event handlers must type the param as Event not a narrowed subtype like MouseEvent (TS2345).
 ---
 
 # Arrow.js Templates (v1.0.6)
@@ -66,12 +66,36 @@ html`${boundary(Card())}`
 Works client-side with no SSR. `boundary()` only takes `{ idPrefix }`; the
 visible loading state comes from the async component's `fallback` option.
 
-## Hard footguns (cause `Invalid HTML position` at render)
+## Event handler typing
+
+An `@event` handler must be assignable to `(e: Event) => void`. A handler typed
+with a narrowed subtype fails (parameter contravariance) — `tsc` reports
+`TS2345 … not assignable to 'ArrowExpression'`. Type the param `Event` and
+narrow inside; no-arg handlers are always fine.
+
+```ts
+// ❌ TS2345 — narrowed param
+html`<div @mousedown="${(e: MouseEvent) => resize(e)}">`
+// ✅ widen, narrow inside
+html`<div @mousedown="${(e: Event) => resize(e as MouseEvent)}">`
+```
+
+(document.addEventListener handlers are unaffected — they're DOM-lib typed.)
+
+## Hard footguns
+
+Render-time (pass `tsc`, fail only at render — always verify in a browser):
 
 1. **No literal HTML comments inside templates.** Arrow uses HTML comments as
    expression-slot markers, so a literal `<!-- … -->` inflates the slot count and
-   throws. Use JS `//` comments outside the template literal.
-2. **No partial attribute values** (see Attributes above).
+   throws `Invalid HTML position`. Use JS `//` comments outside the template.
+2. **No partial attribute values** — the expression must be the whole value
+   (see Attributes above), else `Invalid HTML position`.
 
-Both pass `tsc` cleanly and only fail at render — so always verify in a browser,
-and guard them in CI (scan source for `<!--` inside template modules).
+Type-time (caught by `tsc`):
+
+3. **No narrowed `Event` subtype in `@event` handlers** (see Event handler
+   typing above).
+
+CI guards all three: `test/template-footguns.test.mjs` scans for `<!--` and for
+inline handlers typed with a narrowed Event subtype; `tsc` covers the rest.

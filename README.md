@@ -99,3 +99,8 @@ These are enforced/encoded so they don't regress:
 3. **Reactive vs static:** `${data.x}` renders once; `${() => data.x}` is tracked
    and updates only that slot. Returning `false` from an attribute expression
    removes the attribute.
+4. **`@event` handlers must type the param `Event`, not a narrowed subtype**
+   (`MouseEvent`, …). Parameter contravariance makes `(e: MouseEvent) => void`
+   fail to assign to Arrow's handler type (`TS2345`); use `(e: Event) => …` and
+   narrow inside. Caught by `tsc`, and the inline form is also guarded by
+   `test/template-footguns.test.mjs`.
