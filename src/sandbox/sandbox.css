@@ -42,7 +42,27 @@ body {
 	padding: var(--size-4-3);
 }
 
-.oas-frame .view-header .oas-theme-toggle {
+.oas-frame .view-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.oas-frame .oas-view-header-left {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+}
+
+.oas-frame .view-header .oas-theme-toggle,
+.oas-frame .view-header .oas-home {
 	font-size: var(--font-ui-medium);
 	line-height: 1;
+	text-decoration: none;
+}
+
+.oas-frame a.oas-open-link {
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
 }

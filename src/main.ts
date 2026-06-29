@@ -2,8 +2,7 @@
 // This is the one extra line a plugin would add to adopt @arrow-js/framework.
 import "@arrow-js/framework";
 
-import { SettingsPanel } from "./components/SettingsPanel";
-import { Frame } from "./sandbox/frame";
+import { startRouter } from "./router/client";
 import { applyTheme } from "./sandbox/theme";
 import "./sandbox/sandbox.css";
 
@@ -14,5 +13,6 @@ if (!root) {
 	throw new Error("Sandbox mount point #app not found.");
 }
 
-// Mount exactly like an Obsidian ItemView would: template(container).
-Frame(SettingsPanel())(root);
+// Routes resolve through routeToPage() and mount via template(container) —
+// the same call an Obsidian ItemView.onOpen() makes.
+startRouter(root);
