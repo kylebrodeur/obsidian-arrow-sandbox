@@ -14,6 +14,8 @@
 		"test": "node --test test/*.test.mjs",
 		"check": "biome check --write . && pnpm typecheck && pnpm test",
 		"ci": "biome ci . && pnpm typecheck && pnpm test && pnpm build",
+		"skills:install": "node scripts/install-skills.mjs --force",
+		"postinstall": "node scripts/install-skills.mjs",
 		"prepare": "husky"
 	},
 	"lint-staged": {

@@ -22,6 +22,12 @@ writes `public/app.css`. Override the location with `--path <obsidian.asar|app.c
 or `OBSIDIAN_ASAR=<path>`. The output is committed, so `pnpm dev` works without a
 local Obsidian present.
 
+> **Platform note:** automatic Obsidian discovery is currently **macOS-only** —
+> `pull-css` knows where `Obsidian.app` lives on macOS. Windows and WSL paths are
+> not auto-detected yet (planned). On those platforms, point the script at the
+> file explicitly via `--path <obsidian.asar|app.css>` or `OBSIDIAN_ASAR=<path>`,
+> or just rely on the committed `public/app.css`.
+
 ## Scripts
 
 | Script | What it does |
@@ -37,6 +43,25 @@ local Obsidian present.
 
 A husky `pre-commit` hook runs `lint-staged` (Biome on staged files) + a full
 typecheck. CI (`.github/workflows/ci.yml`) runs the `ci` script on push/PR.
+
+## Bundled agent skills
+
+This repo ships [`skills`](https://github.com/vercel-labs/skills)-compatible skills
+under [`skills/`](skills/) — it doubles as a local skill marketplace:
+
+- `obsidian-arrow-sandbox` — running and using this sandbox, and porting to a plugin.
+- `arrow-js-obsidian-templates` — Arrow v1.0.6 template rules + footguns.
+
+Install them into your agent via the interactive TUI:
+
+```sh
+pnpm skills:install      # = npx skills add .  (pick skills in the TUI)
+```
+
+`postinstall` offers this automatically after `pnpm install`, but only in an
+interactive terminal — it skips in CI / non-TTY (set `SKIP_SKILLS_INSTALL=1` to
+opt out entirely). You can also add this repo from anywhere with
+`npx skills add <git-url-or-path>`.
 
 ## Porting a component into the plugin
 
