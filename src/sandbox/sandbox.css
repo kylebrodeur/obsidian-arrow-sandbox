@@ -7,7 +7,6 @@
  * Obsidian tokens so the sandbox tracks the active theme.
  */
 
-/* Make the page behave like an Obsidian pane viewport. */
 html,
 body {
 	margin: 0;
@@ -19,20 +18,63 @@ body {
 
 #app {
 	height: 100vh;
+}
+
+/* Shell: width-control toolbar on top, pane stage below. */
+.oas-shell {
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	height: 100vh;
+}
+
+.oas-toolbar {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	padding: var(--size-4-1) var(--size-4-3);
+	background: var(--background-secondary);
+	border-bottom: 1px solid var(--background-modifier-border);
+	color: var(--text-muted);
+	font-size: var(--font-ui-small);
+}
+
+.oas-toolbar .oas-toolbar-label {
+	font-weight: var(--font-medium);
+}
+
+.oas-toolbar .oas-width-range {
+	flex: 0 1 220px;
+}
+
+.oas-toolbar .oas-width-readout {
+	min-width: 52px;
+	font-family: var(--font-monospace);
+	color: var(--text-normal);
+}
+
+.oas-toolbar button.oas-preset {
+	height: var(--size-4-5);
+	padding: 0 var(--size-4-2);
+	font-size: var(--font-ui-smaller);
+}
+
+/* Stage: left-aligned so the edge drag handle resizes width 1:1. */
+.oas-stage {
+	flex: 1;
+	display: flex;
+	justify-content: flex-start;
+	overflow: hidden;
 	background: var(--background-secondary);
 }
 
-/* A sidebar-leaf-sized frame so component layouts read at realistic widths. */
 .oas-frame.workspace-leaf {
-	width: 100%;
-	max-width: 420px;
+	position: relative;
+	flex: 0 0 auto;
 	height: 100%;
+	min-width: 240px;
 	display: flex;
 	flex-direction: column;
 	background: var(--background-primary);
-	border-left: 1px solid var(--background-modifier-border);
 	border-right: 1px solid var(--background-modifier-border);
 }
 
@@ -65,4 +107,19 @@ body {
 	text-decoration: none;
 	display: inline-flex;
 	align-items: center;
+}
+
+/* Drag-to-resize handle on the pane's right edge (Obsidian-like). */
+.oas-frame .oas-resize-handle {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 6px;
+	height: 100%;
+	cursor: ew-resize;
+}
+
+.oas-frame .oas-resize-handle:hover {
+	background: var(--interactive-accent);
+	opacity: 0.5;
 }

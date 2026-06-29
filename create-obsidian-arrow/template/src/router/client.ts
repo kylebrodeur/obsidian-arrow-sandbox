@@ -1,4 +1,5 @@
 import { Frame } from "../sandbox/frame";
+import { Shell } from "../sandbox/shell";
 import { routeToPage } from "./routeToPage";
 
 /**
@@ -31,7 +32,7 @@ export function startRouter(root: HTMLElement): void {
 		const page = routeToPage(url);
 		document.title = page.title;
 		root.replaceChildren();
-		Frame(page.title, page.view)(root);
+		Shell(Frame(page.title, page.view))(root);
 	};
 
 	render(window.location.href);
