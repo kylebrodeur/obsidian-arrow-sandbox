@@ -1,0 +1,15 @@
+{
+	"name": "create-obsidian-arrow",
+	"version": "0.1.0",
+	"description": "Scaffold an Obsidian-styled Arrow.js UI sandbox (pnpm create obsidian-arrow <dir>).",
+	"type": "module",
+	"bin": {
+		"create-obsidian-arrow": "index.mjs"
+	},
+	"files": ["index.mjs", "template"],
+	"engines": {
+		"node": ">=18"
+	},
+	"keywords": ["obsidian", "arrow-js", "create", "scaffold", "template"],
+	"license": "MIT"
+}

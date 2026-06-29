@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Obsidian Arrow Sandbox</title>
+    <!--
+      Obsidian's app.css scopes its design tokens and component styles under the
+      body theme classes (body.theme-dark / .theme-light) and Obsidian app
+      classes. Without these classes the var(--…) lookups resolve to nothing.
+      The theme class is swapped at runtime by src/sandbox/theme.ts.
+    -->
+    <link rel="stylesheet" href="/app.css" />
+  </head>
+  <body class="theme-dark mod-macos is-frameless obsidian-app show-view-header show-inline-title">
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
