@@ -1,7 +1,7 @@
-import { component, html, reactive } from '@arrow-js/core'
-import type { ArrowTemplate } from '@arrow-js/core'
-import { boundary } from '@arrow-js/framework'
-import { loadStatus } from '../data/loadStatus'
+import { component, html, reactive } from "@arrow-js/core";
+import type { ArrowTemplate } from "@arrow-js/core";
+import { boundary } from "@arrow-js/framework";
+import { loadStatus } from "../data/loadStatus";
 
 /**
  * Baseline Arrow component for the Obsidian sandbox.
@@ -11,7 +11,7 @@ import { loadStatus } from '../data/loadStatus'
  * settings tab. It deliberately exercises the template features that matter:
  *
  *   - reactive `${() => …}` vs static `${…}`
- *   - attribute sync with false-removal: `disabled="${() => … ? true : false}"`
+ *   - attribute sync with false-removal: `disabled="${() => !cond}"` (false ⇒ removed)
  *   - property binding: `.checked="${() => …}"`
  *   - events: `@click`
  *   - keyed lists: `.key(id)` + fine-grained in-place reactivity
@@ -19,35 +19,50 @@ import { loadStatus } from '../data/loadStatus'
  */
 
 interface Feature {
-  id: string
-  name: string
-  description: string
-  enabled: boolean
+	id: string;
+	name: string;
+	description: string;
+	enabled: boolean;
 }
 
 const tabs = [
-  { id: 'general', label: 'General' },
-  { id: 'advanced', label: 'Advanced engine' },
-] as const
+	{ id: "general", label: "General" },
+	{ id: "advanced", label: "Advanced engine" },
+] as const;
 
-type TabId = (typeof tabs)[number]['id']
+type TabId = (typeof tabs)[number]["id"];
 
 const state = reactive({
-  activeTab: 'general' as TabId,
-  developerMode: true,
-  pluginName: 'Arrow Component',
-  lastAction: '—',
-  features: [
-    { id: 'live-queue', name: 'Live queue', description: 'Stream queue updates into the side panel.', enabled: true },
-    { id: 'semantic', name: 'Semantic search', description: 'Embed notes for vault-wide similarity search.', enabled: false },
-    { id: 'telemetry', name: 'Anonymous telemetry', description: 'Share usage metrics to improve the plugin.', enabled: false },
-  ] as Feature[],
-})
+	activeTab: "general" as TabId,
+	developerMode: true,
+	pluginName: "Arrow Component",
+	lastAction: "—",
+	features: [
+		{
+			id: "live-queue",
+			name: "Live queue",
+			description: "Stream queue updates into the side panel.",
+			enabled: true,
+		},
+		{
+			id: "semantic",
+			name: "Semantic search",
+			description: "Embed notes for vault-wide similarity search.",
+			enabled: false,
+		},
+		{
+			id: "telemetry",
+			name: "Anonymous telemetry",
+			description: "Share usage metrics to improve the plugin.",
+			enabled: false,
+		},
+	] as Feature[],
+});
 
-const enabledCount = (): number => state.features.filter((f) => f.enabled).length
+const enabledCount = (): number => state.features.filter((f) => f.enabled).length;
 
 function rebuildIndex(): void {
-  state.lastAction = `Rebuilt index at tick ${performance.now().toFixed(0)}`
+	state.lastAction = `Rebuilt index at tick ${performance.now().toFixed(0)}`;
 }
 
 /**
@@ -56,11 +71,11 @@ function rebuildIndex(): void {
  * tracked expressions below — no list re-render).
  */
 const Toggle = (enabled: () => boolean, onToggle: () => void): ArrowTemplate => html`<div
-    class="${() => `checkbox-container${enabled() ? ' is-enabled' : ''}`}"
+    class="${() => `checkbox-container${enabled() ? " is-enabled" : ""}`}"
     @click="${onToggle}"
   >
     <input type="checkbox" tabindex="0" .checked="${() => enabled()}" />
-  </div>`
+  </div>`;
 
 const generalTab = (): ArrowTemplate => html`
   <div class="setting-item setting-item-heading">
@@ -79,15 +94,17 @@ const generalTab = (): ArrowTemplate => html`
     </div>
     <div class="setting-item-control">
       ${Toggle(
-        () => state.developerMode,
-        () => (state.developerMode = !state.developerMode)
-      )}
+				() => state.developerMode,
+				() => {
+					state.developerMode = !state.developerMode;
+				}
+			)}
     </div>
   </div>
 
   ${() =>
-    state.features.map((feature) =>
-      html`
+		state.features.map((feature) =>
+			html`
         <div class="setting-item">
           <div class="setting-item-info">
             <div class="setting-item-name">${feature.name}</div>
@@ -95,13 +112,15 @@ const generalTab = (): ArrowTemplate => html`
           </div>
           <div class="setting-item-control">
             ${Toggle(
-              () => feature.enabled,
-              () => (feature.enabled = !feature.enabled)
-            )}
+							() => feature.enabled,
+							() => {
+								feature.enabled = !feature.enabled;
+							}
+						)}
           </div>
         </div>
       `.key(feature.id)
-    )}
+		)}
 
   <div class="setting-item">
     <div class="setting-item-info">
@@ -110,13 +129,13 @@ const generalTab = (): ArrowTemplate => html`
     <div class="setting-item-control">
       <span
         style="${() =>
-          `color: ${state.developerMode ? 'var(--text-accent)' : 'var(--text-error)'}; font-weight: var(--font-semibold);`}"
-      >${() => (state.developerMode ? 'ONLINE' : 'OFFLINE')}</span>
+					`color: ${state.developerMode ? "var(--text-accent)" : "var(--text-error)"}; font-weight: var(--font-semibold);`}"
+      >${() => (state.developerMode ? "ONLINE" : "OFFLINE")}</span>
     </div>
   </div>
 
   ${boundary(statusCard())}
-`
+`;
 
 const advancedTab = (): ArrowTemplate => html`
   <div class="setting-item setting-item-heading">
@@ -130,15 +149,15 @@ const advancedTab = (): ArrowTemplate => html`
       <div class="setting-item-name">Rebuild index</div>
       <div class="setting-item-description">
         ${() =>
-          state.developerMode
-            ? 'Available while developer mode is on.'
-            : 'Enable developer mode to rebuild.'}
+					state.developerMode
+						? "Available while developer mode is on."
+						: "Enable developer mode to rebuild."}
       </div>
     </div>
     <div class="setting-item-control">
       <button
         class="mod-cta"
-        disabled="${() => (state.developerMode ? false : true)}"
+        disabled="${() => !state.developerMode}"
         @click="${rebuildIndex}"
       >Rebuild</button>
     </div>
@@ -152,13 +171,13 @@ const advancedTab = (): ArrowTemplate => html`
       </div>
     </div>
   </div>
-`
+`;
 
 /** Async component: resolves to a setting row; shows a fallback while pending. */
 const statusCard = component(
-  async () => {
-    const status = await loadStatus()
-    return html`
+	async () => {
+		const status = await loadStatus();
+		return html`
       <div class="setting-item">
         <div class="setting-item-info">
           <div class="setting-item-name">Connection</div>
@@ -170,10 +189,10 @@ const statusCard = component(
           </span>
         </div>
       </div>
-    `
-  },
-  {
-    fallback: html`
+    `;
+	},
+	{
+		fallback: html`
       <div class="setting-item">
         <div class="setting-item-info">
           <div class="setting-item-name">Connection</div>
@@ -184,28 +203,30 @@ const statusCard = component(
         </div>
       </div>
     `,
-  }
-)
+	}
+);
 
 export const SettingsPanel = component(
-  () => html`
+	() => html`
     <div class="oas-settings">
       <div class="vertical-tab-header">
         <div class="vertical-tab-header-group">
           <div class="vertical-tab-header-group-title">Plugin settings</div>
           ${() =>
-            tabs.map((tab) =>
-              html`<div
-                  class="${() => `vertical-tab-nav-item${state.activeTab === tab.id ? ' is-active' : ''}`}"
-                  @click="${() => (state.activeTab = tab.id)}"
+						tabs.map((tab) =>
+							html`<div
+                  class="${() => `vertical-tab-nav-item${state.activeTab === tab.id ? " is-active" : ""}`}"
+                  @click="${() => {
+										state.activeTab = tab.id;
+									}}"
                 >${tab.label}</div>`.key(tab.id)
-            )}
+						)}
         </div>
       </div>
 
       <div class="vertical-tab-content">
-        ${() => (state.activeTab === 'general' ? generalTab() : advancedTab())}
+        ${() => (state.activeTab === "general" ? generalTab() : advancedTab())}
       </div>
     </div>
   `
-)
+);

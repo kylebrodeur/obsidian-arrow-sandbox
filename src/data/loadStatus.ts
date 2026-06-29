@@ -4,14 +4,14 @@
  * artificial delay lets us actually see the async fallback render.
  */
 export interface StatusInfo {
-  label: string
-  detail: string
+	label: string;
+	detail: string;
 }
 
 export async function loadStatus(): Promise<StatusInfo> {
-  await new Promise((resolve) => setTimeout(resolve, 900))
-  return {
-    label: 'Connected',
-    detail: 'pi daemon reachable · 12ms latency · 3 vaults synced',
-  }
+	await new Promise((resolve) => setTimeout(resolve, 900));
+	return {
+		label: "Connected",
+		detail: "pi daemon reachable · 12ms latency · 3 vaults synced",
+	};
 }

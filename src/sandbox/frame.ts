@@ -1,6 +1,6 @@
-import { html } from '@arrow-js/core'
-import type { ArrowExpression, ArrowTemplate } from '@arrow-js/core'
-import { themeState, toggleTheme } from './theme'
+import { html } from "@arrow-js/core";
+import type { ArrowExpression, ArrowTemplate } from "@arrow-js/core";
+import { themeState, toggleTheme } from "./theme";
 
 /**
  * Wraps a component in an Obsidian workspace-leaf shell so the sandbox looks
@@ -23,10 +23,10 @@ export const Frame = (content: ArrowExpression): ArrowTemplate => html`
             class="clickable-icon oas-theme-toggle"
             aria-label="Toggle theme"
             @click="${toggleTheme}"
-          >${() => (themeState.theme === 'theme-dark' ? '☾' : '☀')}</button>
+          >${() => (themeState.theme === "theme-dark" ? "☾" : "☀")}</button>
         </div>
       </div>
       <div class="view-content oas-view-content">${content}</div>
     </div>
   </div>
-`
+`;
