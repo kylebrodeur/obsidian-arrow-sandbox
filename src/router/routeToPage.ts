@@ -1,7 +1,7 @@
 import { html } from "@arrow-js/core";
 import type { ArrowExpression } from "@arrow-js/core";
-import { ExamplesIndex } from "../examples/ExamplesIndex";
-import { examples, findExample } from "../examples/registry";
+import { findExample } from "../examples/registry";
+import { Home } from "../sandbox/home";
 
 /**
  * Single route resolver, shared by every entry point. Returns the page status,
@@ -24,8 +24,8 @@ export function routeToPage(url: string): Page {
 	if (pathname === "/" || pathname === "") {
 		return {
 			status: 200,
-			title: `Examples · ${APP_NAME}`,
-			view: ExamplesIndex(examples),
+			title: APP_NAME,
+			view: Home(),
 		};
 	}
 
