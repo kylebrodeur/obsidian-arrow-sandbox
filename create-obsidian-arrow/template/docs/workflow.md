@@ -36,7 +36,8 @@ CSS), so step 3 must run on every fresh checkout, or the sandbox renders unstyle
 From inside the scaffolded project:
 
 ```sh
-pnpm skills:install                      # = npx skills add .  → pick the 3 skills in the TUI
+pnpm skills:install          # interactive picker (TUI) on a terminal
+pnpm skills:install --yes    # non-interactive — installs ALL bundled skills (for agents/CI)
 ```
 
 Then point the agent at [`AGENTS.md`](../AGENTS.md), or brief a fresh agent with

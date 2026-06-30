@@ -79,16 +79,18 @@ under [`skills/`](skills/) — it doubles as a local skill marketplace:
   `component-hash` tool + a husky/CI check that the plugin copy hasn't drifted
   from the sandbox source.
 
-Install them into your agent via the interactive TUI:
+Install them into your agent:
 
 ```sh
-pnpm skills:install      # = npx skills add .  (pick skills in the TUI)
+pnpm skills:install         # interactive picker (TUI) on a terminal
+pnpm skills:install --yes   # non-interactive — installs ALL bundled skills
 ```
 
-`postinstall` offers this automatically after `pnpm install`, but only in an
-interactive terminal — it skips in CI / non-TTY (set `SKIP_SKILLS_INSTALL=1` to
-opt out entirely). You can also add this repo from anywhere with
-`npx skills add <git-url-or-path>`.
+`postinstall` offers the picker automatically after `pnpm install`, but only in
+an interactive terminal — in CI / non-TTY it just prints how to install (never
+hangs). For agents/CI, use `--yes` (it runs `npx skills add . --all --yes`).
+Set `SKIP_SKILLS_INSTALL=1` to opt out entirely. You can also add this repo from
+anywhere with `npx skills add <git-url-or-path>`.
 
 ## Porting a component into the plugin
 

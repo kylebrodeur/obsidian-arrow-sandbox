@@ -1,6 +1,6 @@
 ---
 name: arrow-js-obsidian-templates
-description: Use when writing @arrow-js/core (v1.0.6) html`` templates — the reactive-vs-static rule, full-value attribute binding (returning false removes the attribute), .property and @event binding, keyed lists, async component(fn, { fallback }) wrapped in boundary(), and the footguns: no literal HTML comments inside templates and no partial attribute values (both throw "Invalid HTML position" at render), plus @event handlers must type the param as Event not a narrowed subtype like MouseEvent (TS2345).
+description: Use when writing @arrow-js/core (v1.0.6) html template literals — reactive vs static (wrap reactive reads in arrow functions), full-value attribute binding where returning false removes the attribute, .property and @event binding, keyed lists, and async component(fn, { fallback }) via boundary(); plus the footguns — no literal HTML comments and no partial attribute values (both throw Invalid HTML position at render), and @event handlers must type the param as Event not a narrowed subtype like MouseEvent (TS2345).
 ---
 
 # Arrow.js Templates (v1.0.6)

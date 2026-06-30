@@ -32,8 +32,9 @@ Then:
                     # or set OBSIDIAN_ASAR=<path>.
   pnpm dev          # open the printed URL: / is the examples index, /example the demo.
                     # The toolbar slider/presets + edge drag handle resize the panel.
-  pnpm skills:install   # install the bundled agent skills (npx skills add .) — pick
-                        # them in the TUI; this is how you load the domain knowledge.
+  pnpm skills:install --yes   # install ALL bundled agent skills non-interactively
+                              # (runs `npx skills add . --all --yes`) — this loads
+                              # the domain knowledge. Drop --yes for an interactive picker.
 
 READ FIRST
 - AGENTS.md (root) — operating guide + docs map (links everything below).
