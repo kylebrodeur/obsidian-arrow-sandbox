@@ -38,6 +38,7 @@ From inside the scaffolded project:
 ```sh
 pnpm skills:install          # interactive picker (TUI) on a terminal
 pnpm skills:install --yes    # non-interactive — installs ALL bundled skills (for agents/CI)
+pnpm skills:update           # update an already-installed setup to the latest
 ```
 
 Then point the agent at [`AGENTS.md`](../AGENTS.md), or brief a fresh agent with

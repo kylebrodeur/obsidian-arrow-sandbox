@@ -82,15 +82,17 @@ under [`skills/`](skills/) — it doubles as a local skill marketplace:
 Install them into your agent:
 
 ```sh
-pnpm skills:install         # interactive picker (TUI) on a terminal
-pnpm skills:install --yes   # non-interactive — installs ALL bundled skills
+pnpm skills:install                       # interactive picker (TUI) on a terminal
+pnpm skills:install --yes                 # non-interactive — installs ALL bundled skills
+SKILLS_AGENT=claude-code pnpm skills:install --yes   # install for one agent only
+pnpm skills:update                        # update an existing setup to the latest
 ```
 
 `postinstall` offers the picker automatically after `pnpm install`, but only in
 an interactive terminal — in CI / non-TTY it just prints how to install (never
-hangs). For agents/CI, use `--yes` (it runs `npx skills add . --all --yes`).
-Set `SKIP_SKILLS_INSTALL=1` to opt out entirely. You can also add this repo from
-anywhere with `npx skills add <git-url-or-path>`.
+hangs). For agents/CI, use `--yes` (it runs `npx skills add . --all --yes`); set
+`SKILLS_AGENT=<agent>` to target one agent instead of all. `pnpm skills:update`
+runs `npx skills update -y`. Set `SKIP_SKILLS_INSTALL=1` to opt out entirely.
 
 ## Porting a component into the plugin
 
