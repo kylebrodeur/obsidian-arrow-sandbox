@@ -24,6 +24,21 @@ Then `cd my-app && pnpm install && pnpm pull-css && pnpm dev`. A freshly
 scaffolded project passes `pnpm run ci` out of the box. The initializer's
 template is generated from this repo (`pnpm create:sync`), so it never drifts.
 
+**Update an existing project's tooling** (refreshes the managed files — scripts,
+skills, docs, agent guides, CI, `biome.json` — and merges new `package.json`
+scripts/deps; never touches `src/`, `public/`, `index.html`, or build configs):
+
+```sh
+npx create-obsidian-arrow update            # in the project (or: update <dir>)
+npx create-obsidian-arrow update --dry-run  # preview first
+```
+
+> **Nested in another repo?** If you scaffold inside an existing repo, bundled
+> skills install scoped to the scaffold folder (the `skills` CLI is cwd-relative).
+> To install them at the outer repo instead:
+> `pnpm skills:install --yes --project-dir=<outer-repo>` (or `--global` for
+> user-level). The scaffolder prints this hint when it detects nesting.
+
 > This repo (the full sandbox) is **not** published to npm — only the
 > `create-obsidian-arrow/` initializer is. An agent-onboarding prompt lives in
 > [`docs/prompts/agent-setup.md`](docs/prompts/agent-setup.md).
@@ -82,19 +97,22 @@ under [`skills/`](skills/) — it doubles as a local skill marketplace:
 Install them into your agent:
 
 ```sh
-pnpm skills:install                            # interactive picker (TUI) on a terminal
-pnpm skills:install --yes                      # non-interactive — installs ALL bundled skills
-pnpm skills:install --yes --agent claude-code  # install for one agent only
-pnpm skills:update                             # update an existing setup to the latest
+pnpm skills:install                                 # interactive picker (TUI) on a terminal
+pnpm skills:install --yes                           # non-interactive — installs ALL bundled skills
+pnpm skills:install --yes --agent claude-code       # install for one agent only
+pnpm skills:install --yes --project-dir=<repo-root> # install into another project root
+pnpm skills:update                                  # update an existing setup to the latest
 ```
 
 `postinstall` offers the picker automatically after `pnpm install`, but only in
 an interactive terminal — in CI / non-TTY it just prints how to install (never
-hangs). For agents/CI, use `--yes` (it runs `npx skills add . --all --yes`);
-`--agent <name>` (or `--agent=<name>`) targets one agent instead of all.
-`pnpm skills:update` runs `npx skills update -y`. The auto `postinstall` step
-takes no CLI args, so use `SKILLS_AGENT=<name>` (and `SKIP_SKILLS_INSTALL=1` to
-opt out) to influence *that* path.
+hangs). For agents/CI, use `--yes` (it runs `npx skills add . --all --yes`).
+Scope flags: `--agent <name>` (one agent), `--project-dir=<path>` (install into a
+different project root, e.g. an outer repo a scaffold is nested in), `--global`
+(user-level, available everywhere). `pnpm skills:update` runs
+`npx skills update -y`. The auto `postinstall` step takes no CLI args, so the env
+forms `SKILLS_AGENT` / `SKILLS_PROJECT_DIR` / `SKILLS_GLOBAL` (and
+`SKIP_SKILLS_INSTALL=1`) influence *that* path.
 
 ## Porting a component into the plugin
 

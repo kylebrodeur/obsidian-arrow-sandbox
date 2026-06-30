@@ -44,6 +44,13 @@ pnpm skills:update           # update an already-installed setup to the latest
 Then point the agent at [`AGENTS.md`](../AGENTS.md), or brief a fresh agent with
 [`docs/prompts/agent-setup.md`](prompts/agent-setup.md).
 
+**Nested inside another repo?** Skills install scoped to the current folder (the
+`skills` CLI is cwd-relative). To install them at the outer repo instead:
+`pnpm skills:install --yes --project-dir=<outer-repo>` (or `--global`).
+
+**Refresh an existing project's tooling** (scripts, skills, docs, CI — never your
+`src/`): `npx create-obsidian-arrow update` (add `--dry-run` to preview).
+
 ## Build → verify → port loop
 
 ```sh

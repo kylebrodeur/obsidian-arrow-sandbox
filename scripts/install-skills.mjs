@@ -21,12 +21,18 @@
  *   --yes / -y              non-interactive install of all bundled skills
  *   --agent <name> | --agent=<name>   install for one agent (e.g. claude-code)
  *                          instead of all detected agents
- *   SKILLS_AGENT=<name>     same as --agent, for the auto `postinstall` step
- *                          (which can't take CLI args) and CI
+ *   --project-dir=<path>    install into another project root (e.g. the outer repo
+ *                          a scaffold is nested in); project-scoped there
+ *   --global / -g           install at user level (~/.<agent>/…), available
+ *                          everywhere; some agents don't support global
+ *   SKILLS_AGENT / SKILLS_PROJECT_DIR / SKILLS_GLOBAL   env forms (for the auto
+ *                          `postinstall` step, which can't take CLI args, and CI)
  *   --dry-run / SKILLS_DRY_RUN=1   print the command instead of running it
  *   SKIP_SKILLS_INSTALL=1   opt out of the postinstall auto-step
  */
 import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
 import process from "node:process";
 
 const BUNDLED =
@@ -43,23 +49,53 @@ const flagValue = (flag) => {
 	return i >= 0 ? process.argv[i + 1] : undefined;
 };
 
+/** Nearest ancestor *above* `dir` that is a git repo, or null. Used to warn
+ * when this project is nested inside another repo (skills install per-project,
+ * relative to cwd — not the outer root). */
+function outerRepoAbove(dir) {
+	let current = path.dirname(path.resolve(dir));
+	const fsRoot = path.parse(current).root;
+	while (current && current !== fsRoot) {
+		if (fs.existsSync(path.join(current, ".git"))) {
+			return current;
+		}
+		current = path.dirname(current);
+	}
+	return null;
+}
+
 const forced = has("--force"); // set by `pnpm skills:install`
 const update = has("--update") || has("-u");
 const yes = has("--yes") || has("-y");
+const global = has("--global") || has("-g") || process.env.SKILLS_GLOBAL === "1";
 const agent = flagValue("--agent") || process.env.SKILLS_AGENT;
+const projectDir = flagValue("--project-dir") || process.env.SKILLS_PROJECT_DIR;
 const dryRun = has("--dry-run") || process.env.SKILLS_DRY_RUN === "1";
 const isCI = Boolean(process.env.CI);
 const interactive = Boolean(process.stdout.isTTY && process.stdin.isTTY);
 const optedOut = process.env.SKIP_SKILLS_INSTALL === "1";
 
-function run(args) {
+// `skills add` installs project-scope relative to cwd. To install into another
+// root (e.g. the outer repo a scaffold is nested in), run the CLI there while
+// sourcing the skills from THIS folder by absolute path.
+const skillsSource = projectDir ? path.resolve(".") : ".";
+const targetCwd = projectDir ? path.resolve(projectDir) : process.cwd();
+
+if (projectDir && !fs.existsSync(targetCwd)) {
+	console.error(`[skills] --project-dir not found: ${targetCwd}`);
+	process.exit(1);
+}
+
+function run(args, cwd = process.cwd()) {
+	const where = cwd === process.cwd() ? "" : ` (in ${cwd})`;
 	const pretty = ["npx", "skills", ...args].join(" ");
 	if (dryRun) {
-		console.log(`[skills] (dry-run) would run: ${pretty}`);
+		console.log(`[skills] (dry-run) would run: ${pretty}${where}`);
 		process.exit(0);
 	}
-	console.log(`[skills] ${pretty}`);
+	console.log(`[skills] ${pretty}${where}`);
 	const result = spawnSync("npx", ["--yes", "skills", ...args], {
+		cwd,
 		stdio: "inherit",
 		shell: process.platform === "win32",
 	});
@@ -92,16 +128,26 @@ if (!forced && (isCI || !interactive)) {
 	process.exit(0);
 }
 
-// Non-interactive (CI/agent/no TTY, or --yes, or an agent target): install ALL
-// bundled skills with no prompts. Target one agent if asked, else all agents.
-if (!interactive || yes || agent) {
+// Non-interactive (CI/agent/no TTY, or --yes, or an agent/global target): install
+// ALL bundled skills with no prompts. Target one agent if asked, else all agents.
+if (!interactive || yes || agent || global || projectDir) {
 	console.log(`[skills] Installing all bundled skills non-interactively: ${BUNDLED}`);
-	if (agent) {
-		// `--all` is shorthand for `-s * -a * -y`, so to target one agent we
-		// spell out all-skills + that agent explicitly.
-		run(["add", ".", "-s", "*", "-a", agent, "-y"]);
+	const outer = global || projectDir ? null : outerRepoAbove(process.cwd());
+	if (outer) {
+		console.log(
+			`[skills] note: this folder is nested inside ${outer}. Skills install here, scoped to THIS project. To install at the outer repo instead, re-run with --project-dir=${outer} (or --global for user-level).`
+		);
 	}
-	run(["add", ".", "--all"]);
+	// `--all` is shorthand for `-s * -a * -y`; to target one agent we spell out
+	// all-skills + that agent explicitly. `skillsSource` is absolute when
+	// --project-dir redirects cwd elsewhere.
+	const args = agent
+		? ["add", skillsSource, "-s", "*", "-a", agent, "-y"]
+		: ["add", skillsSource, "--all"];
+	if (global) {
+		args.push("--global");
+	}
+	run(args, targetCwd);
 }
 
 // Interactive terminal: let the user pick in the TUI.
