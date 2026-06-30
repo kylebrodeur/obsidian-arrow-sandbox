@@ -4,8 +4,18 @@ Operating guide for AI agents working in **obsidian-arrow-sandbox** — a
 client-only environment for prototyping [Arrow.js](https://arrow-js.com/) UI that
 ports into an Obsidian plugin with near-zero refactoring.
 
-Full design + rationale: [`docs/superpowers/specs`](docs/superpowers/specs/2026-06-29-obsidian-arrow-sandbox-design.md).
-Deeper how-to skills: [`skills/`](skills/) (install via `npx skills`).
+## Docs map (start here)
+
+This file is the hub — everything else is linked from here:
+
+- [`docs/workflow.md`](docs/workflow.md) — fresh-machine → running workflow.
+- [`skills/`](skills/) — installable domain skills (`pnpm skills:install`):
+  obsidian-arrow-sandbox, arrow-js-obsidian-templates, arrow-js-obsidian-patterns.
+- [`docs/prompts/agent-setup.md`](docs/prompts/agent-setup.md) — prompt for
+  briefing a fresh agent (scaffold + orient).
+
+Design rationale (why `core`+`framework`, no SSR, how `app.css` is sourced) is
+summarized in "What this is (and isn't)" below and in the README.
 
 ## What this is (and isn't)
 

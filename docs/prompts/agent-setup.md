@@ -36,11 +36,11 @@ Then:
                         # them in the TUI; this is how you load the domain knowledge.
 
 READ FIRST
-- AGENTS.md (root) — operating guide: run, footguns, CSS scoping, verify, port.
+- AGENTS.md (root) — operating guide + docs map (links everything below).
+- docs/workflow.md — fresh-machine → running workflow.
 - skills/*/SKILL.md — obsidian-arrow-sandbox (workflow), arrow-js-obsidian-
   templates (template syntax + footguns), arrow-js-obsidian-patterns (icons via
   Lucide/data-icon sweep, CSS scoping, mount/unmount lifecycle, reactive state).
-- docs/superpowers/specs/ — design + decision record (why core+framework, no SSR).
 
 ARROW v1.0.6 FOOTGUNS — do not relearn these the hard way:
 1. NO literal HTML comments inside html`` templates — Arrow treats HTML comments

@@ -29,6 +29,10 @@ const EXCLUDE_TOP = new Set([
 	"public",
 ]);
 
+// Nested paths (relative to the repo root) never copied into the template.
+// The design spec is dev-history for this repo — end users don't need it.
+const EXCLUDE_REL = new Set(["docs/superpowers"]);
+
 function copyDir(src, dest, isRoot) {
 	fs.mkdirSync(dest, { recursive: true });
 	for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
@@ -43,6 +47,9 @@ function copyDir(src, dest, isRoot) {
 			continue;
 		}
 		const srcPath = path.join(src, entry.name);
+		if (EXCLUDE_REL.has(path.relative(repoRoot, srcPath))) {
+			continue;
+		}
 		const destName = isRoot && entry.name === ".gitignore" ? "_gitignore" : entry.name;
 		const destPath = path.join(dest, destName);
 		if (entry.isDirectory()) {

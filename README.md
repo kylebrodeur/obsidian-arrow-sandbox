@@ -7,8 +7,7 @@ styled entirely by Obsidian's real `app.css`, so what you see here is what you
 get inside a plugin view.
 
 New machine? See [`docs/workflow.md`](docs/workflow.md) for the full
-fresh-checkout-to-running workflow. Design + decision record:
-[`docs/superpowers/specs`](docs/superpowers/specs/2026-06-29-obsidian-arrow-sandbox-design.md).
+fresh-checkout-to-running workflow.
 
 ## Scaffold a new project
 
