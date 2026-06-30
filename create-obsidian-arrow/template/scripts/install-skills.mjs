@@ -19,8 +19,10 @@
  * Flags / env:
  *   --update / -u           update installed skills (runs `skills update -y`)
  *   --yes / -y              non-interactive install of all bundled skills
- *   --agent <name> / SKILLS_AGENT=<name>   install for one agent (e.g. claude-code)
+ *   --agent <name> | --agent=<name>   install for one agent (e.g. claude-code)
  *                          instead of all detected agents
+ *   SKILLS_AGENT=<name>     same as --agent, for the auto `postinstall` step
+ *                          (which can't take CLI args) and CI
  *   --dry-run / SKILLS_DRY_RUN=1   print the command instead of running it
  *   SKIP_SKILLS_INSTALL=1   opt out of the postinstall auto-step
  */
@@ -31,7 +33,12 @@ const BUNDLED =
 	"obsidian-arrow-sandbox, arrow-js-obsidian-templates, arrow-js-obsidian-patterns, arrow-js-obsidian-porting";
 
 const has = (flag) => process.argv.includes(flag);
+// Accepts both `--flag value` and `--flag=value`.
 const flagValue = (flag) => {
+	const eq = process.argv.find((a) => a.startsWith(`${flag}=`));
+	if (eq) {
+		return eq.slice(flag.length + 1);
+	}
 	const i = process.argv.indexOf(flag);
 	return i >= 0 ? process.argv[i + 1] : undefined;
 };
