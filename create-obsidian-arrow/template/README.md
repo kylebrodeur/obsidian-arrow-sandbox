@@ -75,6 +75,9 @@ under [`skills/`](skills/) — it doubles as a local skill marketplace:
 - `arrow-js-obsidian-templates` — Arrow v1.0.6 template rules + footguns.
 - `arrow-js-obsidian-patterns` — integration patterns: icons (Lucide / data-icon
   sweep), CSS scoping vs Obsidian globals, mount/unmount lifecycle, reactive state.
+- `arrow-js-obsidian-porting` — content-addressed porting parity: the
+  `component-hash` tool + a husky/CI check that the plugin copy hasn't drifted
+  from the sandbox source.
 
 Install them into your agent via the interactive TUI:
 

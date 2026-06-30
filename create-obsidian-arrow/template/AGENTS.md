@@ -10,7 +10,8 @@ This file is the hub — everything else is linked from here:
 
 - [`docs/workflow.md`](docs/workflow.md) — fresh-machine → running workflow.
 - [`skills/`](skills/) — installable domain skills (`pnpm skills:install`):
-  obsidian-arrow-sandbox, arrow-js-obsidian-templates, arrow-js-obsidian-patterns.
+  obsidian-arrow-sandbox, arrow-js-obsidian-templates, arrow-js-obsidian-patterns,
+  arrow-js-obsidian-porting (sandbox→plugin parity check).
 - [`docs/prompts/agent-setup.md`](docs/prompts/agent-setup.md) — prompt for
   briefing a fresh agent (scaffold + orient).
 
