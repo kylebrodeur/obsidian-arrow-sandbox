@@ -6,17 +6,10 @@ components against Obsidian's real `app.css`, ready to port into a plugin.
 
 ## Usage
 
-Once published:
-
 ```sh
-pnpm create obsidian-arrow my-app
-# or: npm create obsidian-arrow@latest my-app
-```
-
-Locally (before publishing), from the sandbox repo:
-
-```sh
-node create-obsidian-arrow/index.mjs ../my-app
+npm create obsidian-arrow@latest my-app
+# or: pnpm create obsidian-arrow my-app
+# or: npx create-obsidian-arrow my-app
 ```
 
 Then:
@@ -24,8 +17,17 @@ Then:
 ```sh
 cd my-app
 pnpm install
-pnpm pull-css   # extract Obsidian's app.css (macOS auto-detect)
+pnpm pull-css   # required — extract Obsidian's app.css from your local install (macOS auto-detect)
 pnpm dev
+```
+
+> `public/app.css` is git-ignored and never bundled — it's Obsidian's proprietary
+> CSS, so each developer extracts it from their own install via `pnpm pull-css`.
+
+Local dev of the initializer itself (from the sandbox repo, before publishing):
+
+```sh
+node create-obsidian-arrow/index.mjs ../my-app
 ```
 
 ## What you get

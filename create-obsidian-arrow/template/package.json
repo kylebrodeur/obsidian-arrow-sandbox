@@ -38,5 +38,6 @@
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": ["@biomejs/biome"]
-	}
+	},
+	"version": "0.1.0"
 }

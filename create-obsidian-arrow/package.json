@@ -7,8 +7,14 @@
 		"create-obsidian-arrow": "index.mjs"
 	},
 	"files": ["index.mjs", "template"],
+	"scripts": {
+		"prepack": "node scripts/sync-template.mjs"
+	},
 	"engines": {
 		"node": ">=18"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"keywords": [
 		"obsidian",

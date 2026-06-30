@@ -11,17 +11,22 @@ See the design + decision record in
 
 ## Scaffold a new project
 
-This repo doubles as a template. The [`create-obsidian-arrow`](create-obsidian-arrow/)
-initializer scaffolds a fresh sandbox:
+Scaffold a fresh sandbox with the published initializer
+([`create-obsidian-arrow`](create-obsidian-arrow/)):
 
 ```sh
-pnpm create obsidian-arrow my-app    # once published
-# locally, before publishing:
-node create-obsidian-arrow/index.mjs ../my-app
+npm create obsidian-arrow@latest my-app
+# or:  pnpm create obsidian-arrow my-app
+# or:  npx create-obsidian-arrow my-app
 ```
 
-The vendored template is generated from this repo (`pnpm create:sync`), so it
-never drifts. A freshly scaffolded project passes `pnpm run ci` out of the box.
+Then `cd my-app && pnpm install && pnpm pull-css && pnpm dev`. A freshly
+scaffolded project passes `pnpm run ci` out of the box. The initializer's
+template is generated from this repo (`pnpm create:sync`), so it never drifts.
+
+> This repo (the full sandbox) is **not** published to npm — only the
+> `create-obsidian-arrow/` initializer is. An agent-onboarding prompt lives in
+> [`docs/prompts/agent-setup.md`](docs/prompts/agent-setup.md).
 
 ## Quick start
 

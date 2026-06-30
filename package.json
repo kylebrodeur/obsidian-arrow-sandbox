@@ -1,5 +1,6 @@
 {
 	"name": "obsidian-arrow-sandbox",
+	"private": true,
 	"type": "module",
 	"description": "Client-only sandbox for prototyping Obsidian plugin UI with Arrow.js against Obsidian's real styling.",
 	"license": "MIT",
