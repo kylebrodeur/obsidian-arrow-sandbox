@@ -13,8 +13,8 @@ This file is the hub — everything else is linked from here:
   obsidian-arrow-sandbox, arrow-js-obsidian-templates, arrow-js-obsidian-patterns,
   arrow-js-obsidian-porting (sandbox→plugin parity check), obsidian-arrow-maintenance
   (updating an existing project).
-- [`docs/prompts/agent-setup.md`](docs/prompts/agent-setup.md) — prompt for
-  briefing a fresh agent (scaffold + orient).
+- [`docs/prompts/`](docs/prompts/) — copy-paste agent prompts: `agent-setup.md`
+  (scaffold + orient) and `update-existing.md` (update tooling + skills, keep src).
 
 Design rationale (why `core`+`framework`, no SSR, how `app.css` is sourced) is
 summarized in "What this is (and isn't)" below and in the README.

@@ -42,8 +42,9 @@ npx create-obsidian-arrow update --dry-run  # preview first
 > the session**. The scaffolder prints this hint when it detects nesting.
 
 > This repo (the full sandbox) is **not** published to npm — only the
-> `create-obsidian-arrow/` initializer is. An agent-onboarding prompt lives in
-> [`docs/prompts/agent-setup.md`](docs/prompts/agent-setup.md).
+> `create-obsidian-arrow/` initializer is. Copy-paste agent prompts live in
+> [`docs/prompts/`](docs/prompts/): `agent-setup.md` (scaffold + orient) and
+> `update-existing.md` (update tooling + skills, keeping `src/` intact).
 
 ## Quick start
 

@@ -10,6 +10,9 @@ create-only (it refuses a non-empty dir), so updates split into three tracks:
 **tooling files**, **agent skills**, and **styling**. None of these touch your
 `src/`.
 
+For a ready-to-run checklist you can hand to an agent, see
+`docs/prompts/update-existing.md`.
+
 ## 1. Refresh the tooling (scripts, skills files, docs, CI, config)
 
 ```sh
