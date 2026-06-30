@@ -1,30 +1,33 @@
 #!/usr/bin/env node
 /**
- * Install / update the skills bundled in this repo (skills/*) via the `skills`
- * CLI (https://github.com/vercel-labs/skills). This repo is a local skills
- * marketplace: the source `.` resolves to skills/<name>/SKILL.md.
+ * Install / update the obsidian-arrow agent skills via the `skills` CLI
+ * (https://github.com/vercel-labs/skills).
+ *
+ * Skills are NOT vendored into scaffolds — they're pulled from the published
+ * repo (the source of truth), so installs are always current and don't depend on
+ * a bundled copy. The sandbox repo itself (which has a local `skills/` dir) uses
+ * that local copy instead, so you can test edits before publishing.
  *
  * Modes (auto-detected):
  *   - Interactive terminal       → opens the picker TUI (choose what to install).
- *   - Non-interactive / CI / -y  → installs ALL bundled skills, no prompts.
+ *   - Non-interactive / CI / -y  → installs ALL skills, no prompts.
  *   - --update                   → updates an already-installed setup in place.
  *
  * Wiring:
  *   - `postinstall` (auto on `pnpm install`): only acts in an interactive
  *     terminal; in CI/non-TTY it prints how to install and exits 0 (never hangs).
- *   - `pnpm skills:install`        → picker (TUI) on a terminal, else installs all.
- *   - `pnpm skills:install --yes`  → always non-interactive: install all skills.
- *   - `pnpm skills:update`         → update installed skills to the latest.
+ *   - `pnpm skills:install [--yes]`  → picker, or non-interactive install of all.
+ *   - `pnpm skills:update`           → update installed skills to the latest.
  *
  * Flags / env:
+ *   --source <ref> | SKILLS_SOURCE=<ref>   where to pull skills from (default: the
+ *                          published repo; a local `skills/` dir is used if present)
  *   --update / -u           update installed skills (runs `skills update -y`)
- *   --yes / -y              non-interactive install of all bundled skills
- *   --agent <name> | --agent=<name>   install for one agent (e.g. claude-code)
- *                          instead of all detected agents
+ *   --yes / -y              non-interactive install of all skills
+ *   --agent <name> | --agent=<name>   install for one agent instead of all
  *   --project-dir=<path>    install into another project root (e.g. the outer repo
  *                          a scaffold is nested in); project-scoped there
- *   --global / -g           install at user level (~/.<agent>/…), available
- *                          everywhere; some agents don't support global
+ *   --global / -g           install at user level (~/.<agent>/…), everywhere
  *   SKILLS_AGENT / SKILLS_PROJECT_DIR / SKILLS_GLOBAL   env forms (for the auto
  *                          `postinstall` step, which can't take CLI args, and CI)
  *   --dry-run / SKILLS_DRY_RUN=1   print the command instead of running it
@@ -35,8 +38,9 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
-const BUNDLED =
-	"obsidian-arrow-sandbox, arrow-js-obsidian-templates, arrow-js-obsidian-patterns, arrow-js-obsidian-porting";
+const REPO = "kylebrodeur/obsidian-arrow-sandbox";
+const SKILLS =
+	"obsidian-arrow-sandbox, arrow-js-obsidian-templates, arrow-js-obsidian-patterns, arrow-js-obsidian-porting, obsidian-arrow-maintenance";
 
 const has = (flag) => process.argv.includes(flag);
 // Accepts both `--flag value` and `--flag=value`.
@@ -49,9 +53,7 @@ const flagValue = (flag) => {
 	return i >= 0 ? process.argv[i + 1] : undefined;
 };
 
-/** Nearest ancestor *above* `dir` that is a git repo, or null. Used to warn
- * when this project is nested inside another repo (skills install per-project,
- * relative to cwd — not the outer root). */
+/** Nearest ancestor *above* `dir` that is a git repo, or null. */
 function outerRepoAbove(dir) {
 	let current = path.dirname(path.resolve(dir));
 	const fsRoot = path.parse(current).root;
@@ -75,10 +77,14 @@ const isCI = Boolean(process.env.CI);
 const interactive = Boolean(process.stdout.isTTY && process.stdin.isTTY);
 const optedOut = process.env.SKIP_SKILLS_INSTALL === "1";
 
-// `skills add` installs project-scope relative to cwd. To install into another
-// root (e.g. the outer repo a scaffold is nested in), run the CLI there while
-// sourcing the skills from THIS folder by absolute path.
-const skillsSource = projectDir ? path.resolve(".") : ".";
+// Pull from the published repo by default; prefer a local `skills/` dir if
+// present (the sandbox repo itself); honor an explicit --source override.
+const explicitSource = flagValue("--source") || process.env.SKILLS_SOURCE;
+const hasLocalSkills = fs.existsSync(path.join(process.cwd(), "skills"));
+const baseSource = explicitSource ?? (hasLocalSkills ? "." : REPO);
+// A repo ref is cwd-independent; a local "." must be made absolute when
+// --project-dir redirects cwd so it still resolves.
+const source = projectDir && baseSource === "." ? path.resolve(".") : baseSource;
 const targetCwd = projectDir ? path.resolve(projectDir) : process.cwd();
 
 if (projectDir && !fs.existsSync(targetCwd)) {
@@ -101,7 +107,7 @@ function run(args, cwd = process.cwd()) {
 	});
 	if (result.error) {
 		console.error(
-			`[skills] could not run npx skills (${result.error.message}). Install manually: npx skills add . --all --yes`
+			`[skills] could not run npx skills (${result.error.message}). Install manually: npx skills add ${REPO} --all --yes`
 		);
 		process.exit(0); // never fail an install over an optional convenience step
 	}
@@ -123,27 +129,24 @@ if (update) {
 // `pnpm install` in CI never hangs or installs things unprompted.
 if (!forced && (isCI || !interactive)) {
 	console.log(
-		`[skills] Bundled skills: ${BUNDLED}\n         Install:  pnpm skills:install        (interactive picker on a terminal)\n                   pnpm skills:install --yes  (non-interactive — installs all)\n         Update:   pnpm skills:update`
+		`[skills] Agent skills: ${SKILLS}\n         Install:  pnpm skills:install        (interactive picker on a terminal)\n                   pnpm skills:install --yes  (non-interactive — installs all)\n         Update:   pnpm skills:update`
 	);
 	process.exit(0);
 }
 
 // Non-interactive (CI/agent/no TTY, or --yes, or an agent/global target): install
-// ALL bundled skills with no prompts. Target one agent if asked, else all agents.
+// ALL skills with no prompts. Target one agent if asked, else all agents.
 if (!interactive || yes || agent || global || projectDir) {
-	console.log(`[skills] Installing all bundled skills non-interactively: ${BUNDLED}`);
+	console.log(`[skills] Installing all skills non-interactively from ${source}: ${SKILLS}`);
 	const outer = global || projectDir ? null : outerRepoAbove(process.cwd());
 	if (outer) {
 		console.log(
-			`[skills] note: this folder is nested inside ${outer}. Skills install here, scoped to THIS project. To install at the outer repo instead, re-run with --project-dir=${outer} (or --global for user-level).`
+			`[skills] note: this folder is nested inside ${outer}, and skills install scoped to cwd. For session/skill:// discovery they must live at the repo root — install there with:\n         pnpm skills:install --yes --project-dir=${outer}\n         (or, from ${outer}: npx skills add ${REPO} --all --yes). Reload the session afterwards.`
 		);
 	}
 	// `--all` is shorthand for `-s * -a * -y`; to target one agent we spell out
-	// all-skills + that agent explicitly. `skillsSource` is absolute when
-	// --project-dir redirects cwd elsewhere.
-	const args = agent
-		? ["add", skillsSource, "-s", "*", "-a", agent, "-y"]
-		: ["add", skillsSource, "--all"];
+	// all-skills + that agent explicitly.
+	const args = agent ? ["add", source, "-s", "*", "-a", agent, "-y"] : ["add", source, "--all"];
 	if (global) {
 		args.push("--global");
 	}
@@ -151,5 +154,5 @@ if (!interactive || yes || agent || global || projectDir) {
 }
 
 // Interactive terminal: let the user pick in the TUI.
-console.log(`[skills] Opening the skills picker. Bundled: ${BUNDLED}`);
-run(["add", "."]);
+console.log(`[skills] Opening the skills picker (source: ${source}). Skills: ${SKILLS}`);
+run(["add", source]);

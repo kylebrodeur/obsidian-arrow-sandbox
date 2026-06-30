@@ -34,10 +34,12 @@ elsewhere pass `--path <obsidian.asar|app.css>` or set `OBSIDIAN_ASAR=<path>`.
 `public/app.css` is **git-ignored** (Obsidian's proprietary CSS — not
 redistributed), so run `pnpm pull-css` once before `pnpm dev`.
 
-## Install the bundled skills
+## Install the skills
+
+Pulled from the published repo (not vendored into scaffolds), so always current:
 
 ```sh
-pnpm skills:install --yes   # non-interactive: install ALL bundled skills (agents/CI)
+pnpm skills:install --yes   # non-interactive: install all skills (agents/CI)
 pnpm skills:install         # interactive picker on a terminal
 pnpm skills:update          # update an already-installed setup
 ```

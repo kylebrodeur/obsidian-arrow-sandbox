@@ -32,8 +32,8 @@ Then:
                     # or set OBSIDIAN_ASAR=<path>.
   pnpm dev          # open the printed URL: / is the examples index, /example the demo.
                     # The toolbar slider/presets + edge drag handle resize the panel.
-  pnpm skills:install --yes   # install ALL bundled agent skills non-interactively
-                              # (runs `npx skills add . --all --yes`) — this loads
+  pnpm skills:install --yes   # install all agent skills non-interactively, pulled
+                              # from the published repo (not vendored) — this loads
                               # the domain knowledge. Drop --yes for an interactive picker.
                               # NESTED inside another repo? Skills install cwd-relative,
                               # so add --project-dir=<outer-repo> (or --global) to put them

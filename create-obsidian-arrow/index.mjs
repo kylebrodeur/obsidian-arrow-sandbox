@@ -27,17 +27,10 @@ const templateDir = path.join(here, "template");
 
 // Files/dirs the template owns and `update` may overwrite/merge. Everything else
 // (src/, public/, index.html, vite.config.ts, tsconfig.json, lockfile, .gitignore,
-// port-parity.json, …) is treated as user-owned and left alone.
-const MANAGED = [
-	"scripts",
-	"skills",
-	"docs",
-	".github",
-	".husky",
-	"biome.json",
-	"AGENTS.md",
-	"CLAUDE.md",
-];
+// port-parity.json, …) is treated as user-owned and left alone. Skills aren't
+// here — they're pulled from the published repo via `pnpm skills:update`, not
+// vendored into the scaffold.
+const MANAGED = ["scripts", "docs", ".github", ".husky", "biome.json", "AGENTS.md", "CLAUDE.md"];
 
 const argv = process.argv.slice(2);
 const dryRun = argv.includes("--dry-run");
@@ -182,7 +175,7 @@ function update(targetArg) {
 	console.log(
 		dryRun
 			? "\n(dry run — nothing written.)"
-			: "\nLeft alone: src/, public/, index.html, vite.config.ts, tsconfig.json, .gitignore.\nRun `pnpm install` then `pnpm check`.\n"
+			: "\nLeft alone: src/, public/, index.html, vite.config.ts, tsconfig.json, .gitignore.\nRun `pnpm install` then `pnpm check`. Update skills separately with `pnpm skills:update`.\n"
 	);
 }
 

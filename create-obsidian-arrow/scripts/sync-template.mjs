@@ -27,6 +27,9 @@ const EXCLUDE_TOP = new Set([
 	"create-obsidian-arrow",
 	".DS_Store",
 	"public",
+	// Skills aren't vendored into scaffolds — they're pulled from the published
+	// repo by `pnpm skills:install` (source of truth, always current).
+	"skills",
 ]);
 
 // Nested paths (relative to the repo root) never copied into the template.

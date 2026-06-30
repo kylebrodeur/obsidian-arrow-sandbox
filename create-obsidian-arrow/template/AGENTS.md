@@ -41,8 +41,9 @@ pnpm dev          # Vite + HMR
 `public/app.css` is **git-ignored** (Obsidian's proprietary CSS — not
 redistributed); run `pnpm pull-css` once before `pnpm dev`.
 
-Install the bundled skills: `pnpm skills:install --yes` (non-interactive, all
-skills) or `pnpm skills:install` (TUI); update with `pnpm skills:update`. Scope
+Install the skills (pulled from the published repo, not vendored):
+`pnpm skills:install --yes` (non-interactive, all skills) or `pnpm skills:install`
+(TUI); update with `pnpm skills:update`. Scope
 flags: `--agent <name>`, `--project-dir=<path>`, `--global`. **Nested inside
 another repo?** Skills install cwd-relative — use `--project-dir=<outer-repo>` so
 they land where an agent at the outer repo looks. To refresh an existing

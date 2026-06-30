@@ -24,10 +24,11 @@ pnpm dev
 > `public/app.css` is git-ignored and never bundled — it's Obsidian's proprietary
 > CSS, so each developer extracts it from their own install via `pnpm pull-css`.
 
-### Install the bundled skills
+### Install the agent skills
 
-The scaffold ships agent skills and installs them via the [`skills`](https://github.com/vercel-labs/skills)
-CLI:
+Skills aren't vendored into the scaffold — `skills:install` pulls them from the
+published repo (source of truth, always current) via the
+[`skills`](https://github.com/vercel-labs/skills) CLI:
 
 ```sh
 pnpm skills:install --yes                       # non-interactive — installs all
@@ -68,8 +69,9 @@ node create-obsidian-arrow/index.mjs update ../my-app   # update
 
 A full sandbox: client-only Vite + TS, `@arrow-js/core` + `@arrow-js/framework`
 (no SSR), `routeToPage` + Navigation-API router with an `/example` demo, Biome +
-husky pre-commit + `node:test` + GitHub Actions CI, bundled agent skills, and the
-`pull-css` script that extracts Obsidian's `app.css`.
+husky pre-commit + `node:test` + GitHub Actions CI, a `skills:install` that pulls
+the agent skills from the published repo, and the `pull-css` script that extracts
+Obsidian's `app.css`.
 
 ## Maintaining the template
 

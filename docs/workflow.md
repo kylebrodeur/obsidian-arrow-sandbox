@@ -37,7 +37,7 @@ From inside the scaffolded project:
 
 ```sh
 pnpm skills:install          # interactive picker (TUI) on a terminal
-pnpm skills:install --yes    # non-interactive — installs ALL bundled skills (for agents/CI)
+pnpm skills:install --yes    # non-interactive — installs all skills from the published repo (agents/CI)
 pnpm skills:update           # update an already-installed setup to the latest
 ```
 

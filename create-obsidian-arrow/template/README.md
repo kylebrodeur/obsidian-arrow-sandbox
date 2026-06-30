@@ -33,11 +33,13 @@ npx create-obsidian-arrow update            # in the project (or: update <dir>)
 npx create-obsidian-arrow update --dry-run  # preview first
 ```
 
-> **Nested in another repo?** If you scaffold inside an existing repo, bundled
-> skills install scoped to the scaffold folder (the `skills` CLI is cwd-relative).
-> To install them at the outer repo instead:
-> `pnpm skills:install --yes --project-dir=<outer-repo>` (or `--global` for
-> user-level). The scaffolder prints this hint when it detects nesting.
+> **Nested in another repo?** If you scaffold inside an existing repo, skills
+> install scoped to the scaffold folder (the `skills` CLI is cwd-relative), so the
+> session/`skill://` registry — which only indexes the **repo root** + global —
+> won't see them. Install at the outer repo instead:
+> `pnpm skills:install --yes --project-dir=<outer-repo>` (or, from the outer repo,
+> `npx skills add kylebrodeur/obsidian-arrow-sandbox --all --yes`), then **reload
+> the session**. The scaffolder prints this hint when it detects nesting.
 
 > This repo (the full sandbox) is **not** published to npm — only the
 > `create-obsidian-arrow/` initializer is. An agent-onboarding prompt lives in
@@ -81,10 +83,12 @@ Obsidian install.
 A husky `pre-commit` hook runs `lint-staged` (Biome on staged files) + a full
 typecheck. CI (`.github/workflows/ci.yml`) runs the `ci` script on push/PR.
 
-## Bundled agent skills
+## Agent skills
 
-This repo ships [`skills`](https://github.com/vercel-labs/skills)-compatible skills
-under [`skills/`](skills/) — it doubles as a local skill marketplace:
+This repo is the source of truth for five [`skills`](https://github.com/vercel-labs/skills)-compatible
+skills under [`skills/`](skills/) — it's a skill marketplace. Scaffolds **don't
+vendor copies**; they pull from this published repo, so installs are always
+current.
 
 - `obsidian-arrow-sandbox` — running and using this sandbox, and porting to a plugin.
 - `arrow-js-obsidian-templates` — Arrow v1.0.6 template rules + footguns.
@@ -96,19 +100,23 @@ under [`skills/`](skills/) — it doubles as a local skill marketplace:
 - `obsidian-arrow-maintenance` — updating an existing project: `create-obsidian-arrow
   update`, `skills:update`, nesting/`--project-dir`, re-pull styling.
 
-Install them into your agent:
+Install them into your agent (pulls from the published repo; the sandbox repo
+itself uses its local `skills/`):
 
 ```sh
 pnpm skills:install                                 # interactive picker (TUI) on a terminal
-pnpm skills:install --yes                           # non-interactive — installs ALL bundled skills
+pnpm skills:install --yes                           # non-interactive — installs all skills
 pnpm skills:install --yes --agent claude-code       # install for one agent only
 pnpm skills:install --yes --project-dir=<repo-root> # install into another project root
 pnpm skills:update                                  # update an existing setup to the latest
 ```
 
+Anywhere, with no project at all:
+`npx skills add kylebrodeur/obsidian-arrow-sandbox --all --yes`.
+
 `postinstall` offers the picker automatically after `pnpm install`, but only in
 an interactive terminal — in CI / non-TTY it just prints how to install (never
-hangs). For agents/CI, use `--yes` (it runs `npx skills add . --all --yes`).
+hangs). For agents/CI, use `--yes`.
 Scope flags: `--agent <name>` (one agent), `--project-dir=<path>` (install into a
 different project root, e.g. an outer repo a scaffold is nested in), `--global`
 (user-level, available everywhere). `pnpm skills:update` runs
