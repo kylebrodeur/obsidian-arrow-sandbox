@@ -24,10 +24,44 @@ pnpm dev
 > `public/app.css` is git-ignored and never bundled — it's Obsidian's proprietary
 > CSS, so each developer extracts it from their own install via `pnpm pull-css`.
 
-Local dev of the initializer itself (from the sandbox repo, before publishing):
+### Install the bundled skills
+
+The scaffold ships agent skills and installs them via the [`skills`](https://github.com/vercel-labs/skills)
+CLI:
 
 ```sh
-node create-obsidian-arrow/index.mjs ../my-app
+pnpm skills:install --yes                       # non-interactive — installs all
+pnpm skills:install                             # interactive picker
+pnpm skills:install --yes --project-dir=<root>  # install at another repo root (nesting)
+pnpm skills:update                              # update an existing setup
+```
+
+If you scaffold **inside an existing repo**, skills install scoped to the
+scaffold folder (the CLI is cwd-relative); use `--project-dir=<outer-repo>` (or
+`--global`) to install where an agent at the outer repo looks. The scaffolder
+prints this hint when it detects nesting.
+
+## Update an existing project
+
+The scaffolder is create-only, but `update` refreshes an existing project's
+**managed** tooling (`scripts/`, `skills/`, `docs/`, `.github/`, `.husky/`,
+`biome.json`, agent guides) and merges new `package.json` scripts/deps — it never
+touches your `src/`, `public/`, `index.html`, or build configs:
+
+```sh
+npx create-obsidian-arrow update            # in the project (or: update <dir>)
+npx create-obsidian-arrow update --dry-run  # preview
+```
+
+Then `pnpm install && pnpm check`.
+
+## Local dev of the initializer
+
+From the sandbox repo, before publishing:
+
+```sh
+node create-obsidian-arrow/index.mjs ../my-app          # scaffold
+node create-obsidian-arrow/index.mjs update ../my-app   # update
 ```
 
 ## What you get

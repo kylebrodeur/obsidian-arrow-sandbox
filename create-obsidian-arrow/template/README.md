@@ -93,6 +93,8 @@ under [`skills/`](skills/) — it doubles as a local skill marketplace:
 - `arrow-js-obsidian-porting` — content-addressed porting parity: the
   `component-hash` tool + a husky/CI check that the plugin copy hasn't drifted
   from the sandbox source.
+- `obsidian-arrow-maintenance` — updating an existing project: `create-obsidian-arrow
+  update`, `skills:update`, nesting/`--project-dir`, re-pull styling.
 
 Install them into your agent:
 

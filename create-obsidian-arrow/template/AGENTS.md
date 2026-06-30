@@ -11,7 +11,8 @@ This file is the hub — everything else is linked from here:
 - [`docs/workflow.md`](docs/workflow.md) — fresh-machine → running workflow.
 - [`skills/`](skills/) — installable domain skills (`pnpm skills:install`):
   obsidian-arrow-sandbox, arrow-js-obsidian-templates, arrow-js-obsidian-patterns,
-  arrow-js-obsidian-porting (sandbox→plugin parity check).
+  arrow-js-obsidian-porting (sandbox→plugin parity check), obsidian-arrow-maintenance
+  (updating an existing project).
 - [`docs/prompts/agent-setup.md`](docs/prompts/agent-setup.md) — prompt for
   briefing a fresh agent (scaffold + orient).
 
@@ -39,6 +40,14 @@ pnpm dev          # Vite + HMR
 
 `public/app.css` is **git-ignored** (Obsidian's proprietary CSS — not
 redistributed); run `pnpm pull-css` once before `pnpm dev`.
+
+Install the bundled skills: `pnpm skills:install --yes` (non-interactive, all
+skills) or `pnpm skills:install` (TUI); update with `pnpm skills:update`. Scope
+flags: `--agent <name>`, `--project-dir=<path>`, `--global`. **Nested inside
+another repo?** Skills install cwd-relative — use `--project-dir=<outer-repo>` so
+they land where an agent at the outer repo looks. To refresh an existing
+project's tooling, run `npx create-obsidian-arrow update` (see the
+obsidian-arrow-maintenance skill).
 
 ## Arrow v1.0.6 footguns — READ BEFORE WRITING TEMPLATES
 

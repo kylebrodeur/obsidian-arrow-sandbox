@@ -34,6 +34,19 @@ elsewhere pass `--path <obsidian.asar|app.css>` or set `OBSIDIAN_ASAR=<path>`.
 `public/app.css` is **git-ignored** (Obsidian's proprietary CSS — not
 redistributed), so run `pnpm pull-css` once before `pnpm dev`.
 
+## Install the bundled skills
+
+```sh
+pnpm skills:install --yes   # non-interactive: install ALL bundled skills (agents/CI)
+pnpm skills:install         # interactive picker on a terminal
+pnpm skills:update          # update an already-installed setup
+```
+
+Scope flags: `--agent <name>`, `--project-dir=<path>` (install into another repo
+root — use this when the project is **nested** inside a larger repo), `--global`.
+To update an existing project's tooling later, see the **obsidian-arrow-maintenance**
+skill (`npx create-obsidian-arrow update`).
+
 ## Build a component
 
 Add `src/components/MyThing.ts` exporting an Arrow `component()`, then mount it

@@ -1,6 +1,6 @@
 {
 	"name": "create-obsidian-arrow",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"description": "Scaffold an Obsidian-styled Arrow.js UI sandbox (pnpm create obsidian-arrow <dir>).",
 	"type": "module",
 	"bin": {

@@ -35,13 +35,18 @@ Then:
   pnpm skills:install --yes   # install ALL bundled agent skills non-interactively
                               # (runs `npx skills add . --all --yes`) — this loads
                               # the domain knowledge. Drop --yes for an interactive picker.
+                              # NESTED inside another repo? Skills install cwd-relative,
+                              # so add --project-dir=<outer-repo> (or --global) to put them
+                              # where an agent at the outer repo will find them.
 
 READ FIRST
 - AGENTS.md (root) — operating guide + docs map (links everything below).
 - docs/workflow.md — fresh-machine → running workflow.
 - skills/*/SKILL.md — obsidian-arrow-sandbox (workflow), arrow-js-obsidian-
   templates (template syntax + footguns), arrow-js-obsidian-patterns (icons via
-  Lucide/data-icon sweep, CSS scoping, mount/unmount lifecycle, reactive state).
+  Lucide/data-icon sweep, CSS scoping, mount/unmount lifecycle, reactive state),
+  arrow-js-obsidian-porting (sandbox→plugin parity check),
+  obsidian-arrow-maintenance (updating an existing project).
 
 ARROW v1.0.6 FOOTGUNS — do not relearn these the hard way:
 1. NO literal HTML comments inside html`` templates — Arrow treats HTML comments
@@ -76,7 +81,12 @@ PORTING TO A PLUGIN
 Copy the component file into the plugin's view dir and mount from
 ItemView.onOpen() via `template(this.contentEl)`. If it uses boundary()/async
 components, add @arrow-js/framework to the plugin and the side-effect
-`import '@arrow-js/framework'`. Leave src/sandbox/* behind.
+`import '@arrow-js/framework'`. Leave src/sandbox/* behind. Guard against drift
+with the porting-parity check (see the arrow-js-obsidian-porting skill).
+
+MAINTENANCE (existing project)
+Refresh tooling later with `npx create-obsidian-arrow update` (preserves src/),
+update skills with `pnpm skills:update`. See the obsidian-arrow-maintenance skill.
 
 Start by scaffolding, running setup steps, then read AGENTS.md and confirm
 `pnpm dev` renders /example correctly. Report what you see.
