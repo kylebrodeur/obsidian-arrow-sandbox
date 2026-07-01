@@ -1,5 +1,7 @@
+import { html } from "@arrow-js/core";
 import { Frame } from "../sandbox/frame";
 import { Shell } from "../sandbox/shell";
+import type { Page } from "./routeToPage";
 import { routeToPage } from "./routeToPage";
 
 /**
@@ -29,10 +31,21 @@ function getNavigation(): NavigationLike | undefined {
 
 export function startRouter(root: HTMLElement): void {
 	const render = (url: string): void => {
-		const page = routeToPage(url);
+		let resolved = routeToPage(url);
+		for (let hops = 0; "redirect" in resolved && hops < 3; hops++) {
+			window.history.replaceState({}, "", resolved.redirect);
+			resolved = routeToPage(resolved.redirect);
+		}
+		if ("redirect" in resolved) {
+			return;
+		}
+		const page: Page = resolved;
 		document.title = page.title;
 		root.replaceChildren();
-		Shell(Frame(page.title, page.view))(root);
+		const content = page.sidebar
+			? html`${page.sidebar}${Frame(page.title, page.view)}`
+			: Frame(page.title, page.view);
+		Shell(content)(root);
 	};
 
 	render(window.location.href);
