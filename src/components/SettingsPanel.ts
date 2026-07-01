@@ -70,7 +70,7 @@ function rebuildIndex(): void {
  * live state; clicking flips it in place (deep reactivity re-runs only the
  * tracked expressions below — no list re-render).
  */
-const Toggle = (enabled: () => boolean, onToggle: () => void): ArrowTemplate => html`<div
+export const Toggle = (enabled: () => boolean, onToggle: () => void): ArrowTemplate => html`<div
     class="${() => `checkbox-container${enabled() ? " is-enabled" : ""}`}"
     @click="${onToggle}"
   >
