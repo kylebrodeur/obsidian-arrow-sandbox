@@ -228,3 +228,90 @@ body {
 .oas-frame .oas-story-missing {
 	color: var(--text-error);
 }
+
+/* Reference index: token rows and class previews. */
+.oas-frame input.oas-token-filter {
+	width: 100%;
+	margin: var(--size-4-2) 0 var(--size-4-3) 0;
+}
+
+.oas-frame .oas-token-group {
+	margin-bottom: var(--size-4-3);
+}
+
+.oas-frame .oas-token-row {
+	display: grid;
+	grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 48px auto;
+	align-items: center;
+	gap: var(--size-4-2);
+	padding: var(--size-4-1) 0;
+	border-bottom: 1px solid var(--background-modifier-border);
+	font-size: var(--font-ui-smaller);
+}
+
+.oas-frame .oas-token-name {
+	font-family: var(--font-monospace);
+	overflow-wrap: anywhere;
+}
+
+.oas-frame .oas-token-value {
+	color: var(--text-muted);
+	overflow-wrap: anywhere;
+}
+
+.oas-frame .oas-swatch {
+	width: var(--size-4-4);
+	height: var(--size-4-4);
+	border-radius: var(--radius-s);
+	border: 1px solid var(--background-modifier-border);
+	justify-self: start;
+}
+
+.oas-frame .oas-sizebar {
+	height: var(--size-4-2);
+	max-width: 48px;
+	background: var(--text-accent);
+	border-radius: var(--radius-s);
+	justify-self: start;
+}
+
+.oas-frame .oas-swatch-none {
+	width: var(--size-4-4);
+}
+
+.oas-frame .oas-class-group {
+	margin-bottom: var(--size-4-4);
+}
+
+.oas-frame .oas-class-entry {
+	margin: var(--size-4-3) 0;
+}
+
+.oas-frame .oas-class-head {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	font-family: var(--font-monospace);
+	font-size: var(--font-ui-small);
+}
+
+.oas-frame .oas-class-when {
+	margin: var(--size-4-1) 0;
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+/* transform creates a containing block, so position:fixed descendants (e.g.
+   .modal) stay inside the preview box instead of covering the viewport. */
+.oas-frame .oas-class-preview {
+	padding: var(--size-4-3);
+	border: 1px dashed var(--background-modifier-border);
+	border-radius: var(--radius-m);
+	transform: translate(0);
+}
+
+.oas-frame .modal.oas-modal-preview {
+	position: static;
+	width: auto;
+	max-width: 100%;
+}
