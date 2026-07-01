@@ -93,6 +93,7 @@ current.
 
 - `obsidian-arrow-sandbox` — running and using this sandbox, CSS scoping, porting basics.
 - `obsidian-arrow-stories` — **component + story authoring workflow**: the complete `defineStories` API (variants, children, status flag, notes), DRY patterns, utility classes, story viewing, and how to structure sub-components.
+- `obsidian-arrow-css` — **CSS decision hierarchy**: Obsidian classes first, `oas-*` utilities second, custom CSS last; the live token reference (`/reference`), class catalog (`/reference/classes`), specificity scoping, overrides via CSS variables, and auditing components to minimize hand-written CSS.
 - `arrow-js-obsidian-templates` — Arrow v1.0.6 template rules + footguns.
 - `arrow-js-obsidian-patterns` — integration patterns: icons (Lucide / data-icon
   sweep), CSS scoping vs Obsidian globals, mount/unmount lifecycle, reactive state.

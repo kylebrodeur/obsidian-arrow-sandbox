@@ -1,6 +1,6 @@
 ---
 name: arrow-js-obsidian-patterns
-description: Use when building reactive Obsidian plugin UI with @arrow-js/core beyond basic templates — icons (Obsidian uses Lucide; the data-icon sweep since setIcon can't run inside templates), CSS scoping/specificity against Obsidian's global rules, component mount/unmount lifecycle in an ItemView, and organizing shared reactive state. Complements arrow-js-obsidian-templates (syntax) with integration patterns.
+description: Use when building reactive Obsidian plugin UI with @arrow-js/core beyond basic templates — icons (Obsidian uses Lucide; the data-icon sweep since setIcon can't run inside templates), CSS scoping/specificity against Obsidian's global rules, component mount/unmount lifecycle in an ItemView, and organizing shared reactive state. Complements arrow-js-obsidian-templates (syntax) with integration patterns. For the full CSS decision hierarchy (Obsidian classes → oas-* utilities → custom CSS) and token/class reference, see obsidian-arrow-css.
 ---
 
 # Arrow.js + Obsidian integration patterns

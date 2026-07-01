@@ -43,10 +43,13 @@ Then:
 READ FIRST
 - AGENTS.md (root) — operating guide + docs map (links everything below).
 - docs/workflow.md — fresh-machine → running workflow.
-- skills/*/SKILL.md — six installable skills:
+- skills/*/SKILL.md — seven installable skills:
     obsidian-arrow-sandbox    running the sandbox, CSS scoping, porting basics
     obsidian-arrow-stories    component + story authoring: defineStories API,
                               variants, children, status, DRY patterns, utilities
+    obsidian-arrow-css        CSS decision hierarchy: Obsidian classes → oas-*
+                              utilities → custom CSS; token/class reference;
+                              scoping rules; overrides via variables; CSS audit
     arrow-js-obsidian-templates  template syntax + hard footguns
     arrow-js-obsidian-patterns   icons, CSS scoping, lifecycle, reactive state
     arrow-js-obsidian-porting    sandbox→plugin parity check

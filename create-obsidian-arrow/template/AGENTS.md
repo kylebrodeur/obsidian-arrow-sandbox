@@ -12,6 +12,7 @@ This file is the hub — everything else is linked from here:
 - [`skills/`](skills/) — installable domain skills (`pnpm skills:install`):
   - `obsidian-arrow-sandbox` — running the sandbox, CSS scoping, porting basics.
   - `obsidian-arrow-stories` — **component + story authoring workflow**: `defineStories` API, variants, children, status flag, DRY patterns, utilities.
+  - `obsidian-arrow-css` — **CSS decision hierarchy**: Obsidian classes → oas-* utilities → custom CSS; token reference; specificity scoping; overrides via variables; auditing for excess CSS.
   - `arrow-js-obsidian-templates` — Arrow v1.0.6 template syntax + footguns.
   - `arrow-js-obsidian-patterns` — icons, CSS scoping, lifecycle, reactive state.
   - `arrow-js-obsidian-porting` — sandbox→plugin parity check (`component-hash`).
