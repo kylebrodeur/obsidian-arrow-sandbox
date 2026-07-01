@@ -2,9 +2,10 @@ import { html } from "@arrow-js/core";
 import type { ArrowExpression } from "@arrow-js/core";
 import { Home } from "../sandbox/home";
 import { ClassesPage } from "../viewer/ClassesPage";
+import { ComponentsIndex } from "../viewer/ComponentsIndex";
 import { StoryPage } from "../viewer/StoryPage";
 import { TokensPage } from "../viewer/TokensPage";
-import { findStory, stories } from "../viewer/discovery";
+import { findStory } from "../viewer/discovery";
 import { ViewerSidebar } from "../viewer/sidebar";
 
 /**
@@ -57,8 +58,12 @@ export function routeToPage(url: string): Page | Redirect {
 	}
 
 	if (pathname === "/components" || pathname === "/components/") {
-		const first = stories[0];
-		return first ? { redirect: `/components/${first.slug}` } : notFound(pathname);
+		return {
+			status: 200,
+			title: `Components · ${APP_NAME}`,
+			view: ComponentsIndex(),
+			sidebar: ViewerSidebar(pathname),
+		};
 	}
 
 	const storyMatch = pathname.match(/^\/components\/([^/]+)$/);

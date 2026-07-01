@@ -25,6 +25,8 @@ export interface StoryDef {
 	variants: Record<string, VariantInput>;
 	/** Slugs of subcomponent stories for drill-in nesting. */
 	children?: string[];
+	/** Whether this component is production-ready or still in development. */
+	status?: "live" | "draft";
 }
 
 export function defineStories(def: StoryDef): StoryDef {
@@ -60,6 +62,11 @@ export function validateStoryDef(def: unknown): ValidationResult {
 		const children = def.children;
 		if (!Array.isArray(children) || children.some((child) => typeof child !== "string")) {
 			return { ok: false, reason: '"children" must be an array of story slugs' };
+		}
+	}
+	if ("status" in def) {
+		if (def.status !== "live" && def.status !== "draft") {
+			return { ok: false, reason: '"status" must be "live" or "draft"' };
 		}
 	}
 	return { ok: true };

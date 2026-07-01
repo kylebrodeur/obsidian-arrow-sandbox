@@ -21,11 +21,15 @@ function pathRow(label: string, path: string): ArrowExpression {
 export function StoryPage(story: DiscoveredStory, variantName: string): ArrowExpression {
 	const variant = story.variants[variantName];
 	const variantNames = Object.keys(story.variants);
+	const badge =
+		story.status === "live"
+			? html`<span class="oas-badge is-live">live</span>`
+			: html`<span class="oas-badge is-draft">draft</span>`;
 	return html`
 		<div class="oas-story">
 			<div class="setting-item setting-item-heading">
 				<div class="setting-item-info">
-					<div class="setting-item-name">${story.title}</div>
+					<div class="setting-item-name">${story.title} ${badge}</div>
 					${
 						story.description
 							? html`<div class="setting-item-description">${story.description}</div>`

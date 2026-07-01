@@ -17,6 +17,7 @@ export interface DiscoveredStory {
 	componentPath: string;
 	variants: Record<string, StoryVariant>;
 	children: string[];
+	status: "live" | "draft";
 }
 
 export interface InvalidStory {
@@ -49,6 +50,7 @@ for (const [globKey, mod] of Object.entries(modules)) {
 		componentPath: def.componentPath ?? meta.componentPath,
 		variants: normalizeVariants(def.variants),
 		children: def.children ?? [],
+		status: def.status ?? "draft",
 	});
 }
 

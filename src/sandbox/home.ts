@@ -1,6 +1,5 @@
 import { component, html, reactive } from "@arrow-js/core";
 import type { ArrowTemplate } from "@arrow-js/core";
-import { stories } from "../viewer/discovery";
 import { layoutState } from "./layout";
 import { themeState } from "./theme";
 
@@ -21,9 +20,6 @@ function recheck(): void {
 }
 
 const gettingStarted = reactive({ expanded: false });
-
-// Pre-allocate one state per story; stories is static (eager glob), so this runs once.
-const storyStates = new Map(stories.map((s) => [s.slug, reactive({ expanded: false })]));
 
 const GETTING_STARTED = [
 	{ cmd: "pnpm pull-css", note: "extract Obsidian's app.css — run once (macOS auto-detect)" },
@@ -134,54 +130,6 @@ export const Home = component((): ArrowTemplate => {
 					</div>
 				`.key(view.label)
 			)}
-		</div>
-
-		<div class="oas-settings">
-			<div class="setting-item setting-item-heading">
-				<div class="setting-item-info">
-					<div class="setting-item-name">Component Gallery</div>
-					<div class="setting-item-description">
-						All discovered stories — expand to see details and sub-components.
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="oas-gallery">
-			${stories.map((story) => {
-				const state = storyStates.get(story.slug) ?? reactive({ expanded: false });
-				const cardClass = (): string => (state.expanded ? "oas-card is-expanded" : "oas-card");
-				const storyPath = `/components/${story.slug}`;
-				const childrenRows = story.children.map(
-					(slug) => html`<a class="oas-child" href="${`/components/${slug}`}">${slug}</a>`
-				);
-				return html`
-					<div class="${cardClass}">
-						<div
-							class="oas-card-header"
-							@click="${() => {
-								state.expanded = !state.expanded;
-							}}"
-						>
-							<span class="oas-card-title">${story.title}</span>
-							<span class="oas-card-chevron">›</span>
-						</div>
-						<div class="oas-card-body">
-							${story.description ? html`<p class="oas-card-desc">${story.description}</p>` : ""}
-							${
-								story.children.length > 0
-									? html`<div class="oas-card-children">
-										<span class="oas-card-children-label">Sub-components:</span>
-										${childrenRows}
-									</div>`
-									: ""
-							}
-							<div class="oas-card-actions">
-								<a class="mod-cta oas-open-link" href="${storyPath}">Open →</a>
-							</div>
-						</div>
-					</div>
-				`.key(story.slug);
-			})}
 		</div>
 	`;
 });

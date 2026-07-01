@@ -130,9 +130,14 @@ body {
 	opacity: 0.5;
 }
 
-/* Collapsible card — Getting Started accordion and Component Gallery entries. */
+/* Collapsible card — Getting Started accordion and other expandable sections. */
 .oas-card {
 	border-bottom: 1px solid var(--background-modifier-border);
+	border-left: 3px solid var(--background-modifier-border-hover);
+}
+
+.oas-card.is-expanded {
+	border-left-color: var(--interactive-accent);
 }
 
 .oas-card-header {
@@ -140,10 +145,10 @@ body {
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--size-4-2);
-	padding: var(--size-4-2) var(--size-4-3);
+	padding: var(--size-4-3) var(--size-4-3);
 	cursor: pointer;
 	font-size: var(--font-ui-small);
-	font-weight: var(--font-medium);
+	font-weight: var(--font-semibold);
 	color: var(--text-normal);
 	user-select: none;
 }
@@ -215,6 +220,28 @@ body {
 /* Gallery: vertical stack of cards below the heading */
 .oas-gallery {
 	border-top: 1px solid var(--background-modifier-border);
+}
+
+/* Status badges for story live/draft state */
+.oas-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 1px var(--size-4-1);
+	border-radius: var(--radius-s);
+	font-size: var(--font-ui-smaller);
+	font-weight: var(--font-medium);
+	vertical-align: middle;
+	margin-left: var(--size-4-1);
+}
+
+.oas-badge.is-live {
+	background: var(--background-modifier-success);
+	color: var(--text-success);
+}
+
+.oas-badge.is-draft {
+	background: var(--background-modifier-hover);
+	color: var(--text-faint);
 }
 
 /* Component viewer: sidebar (first child of the stage) + story page chrome. */

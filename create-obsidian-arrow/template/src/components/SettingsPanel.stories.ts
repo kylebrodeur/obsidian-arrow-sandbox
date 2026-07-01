@@ -7,4 +7,5 @@ export default defineStories({
 		default: () => SettingsPanel(),
 	},
 	children: ["toggle"],
+	status: "live",
 });

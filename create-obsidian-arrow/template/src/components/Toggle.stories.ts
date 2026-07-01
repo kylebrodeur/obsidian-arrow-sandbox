@@ -24,4 +24,5 @@ export default defineStories({
 			notes: "Static off state (click does nothing).",
 		},
 	},
+	status: "live",
 });
