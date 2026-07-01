@@ -80,6 +80,7 @@ body {
 
 .oas-frame .oas-view-content {
 	flex: 1;
+	min-height: 0;
 	overflow-y: auto;
 	padding: var(--size-4-3);
 }
