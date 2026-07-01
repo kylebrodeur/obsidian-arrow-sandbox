@@ -1,6 +1,6 @@
 ---
 name: obsidian-arrow-sandbox
-description: Use when prototyping or building Arrow.js UI for an Obsidian plugin in the obsidian-arrow-sandbox project — covers running the sandbox, pulling Obsidian's real app.css from the local install, the dev/verify workflow, CSS scoping, and porting a finished component into a plugin's ItemView with near-zero refactoring.
+description: Use when prototyping or building Arrow.js UI for an Obsidian plugin in the obsidian-arrow-sandbox project — covers running the sandbox, pulling Obsidian's real app.css from the local install, the dev/verify workflow, CSS scoping, and porting a finished component into a plugin's ItemView with near-zero refactoring. For the full component + story authoring workflow, see the obsidian-arrow-stories skill.
 ---
 
 # Obsidian Arrow Sandbox
@@ -51,15 +51,13 @@ skill (`npx create-obsidian-arrow update`).
 
 ## Build a component
 
-Add `src/components/MyThing.ts` exporting an Arrow `component()`, then mount it
-from `src/main.ts`. Use Obsidian classes + `var(--…)` tokens first; add custom
-CSS only when there's no Obsidian class, and scope it under a container class +
-element type (e.g. `.oas-frame button.oas-x`) so it beats Obsidian's global
-`button:not(.clickable-icon)` rule. Sandbox-only chrome lives in
-`src/sandbox/sandbox.css`.
+Add `src/components/MyThing.ts` exporting an Arrow `component()`. Use Obsidian
+classes + `var(--…)` tokens first; reach for `oas-*` utility classes
+(`src/utilities.css`) for layout and spacing; add scoped custom CSS only when
+neither covers it. Sandbox-only chrome lives in `src/sandbox/sandbox.css`.
 
-To add a story, create a co-located `*.stories.ts` next to the component — it
-appears at `/components/<slug>` in the story viewer automatically:
+Co-locate `src/components/MyThing.stories.ts` — it appears at
+`/components/<slug>` automatically. Minimal example:
 
 ```ts
 import { defineStories } from "../viewer/stories";
@@ -67,9 +65,13 @@ import { MyThing } from "./MyThing";
 
 export default defineStories({
 	description: "What it demonstrates.",
+	status: "draft",   // set "live" when ready to port
 	variants: { default: () => MyThing() },
 });
 ```
+
+Full `defineStories` options (variants, children, status, notes, componentPath)
+and the complete authoring workflow are in the **obsidian-arrow-stories** skill.
 
 Browse all `var(--)` tokens and curated Obsidian pattern classes at `/reference`.
 

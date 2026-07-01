@@ -10,9 +10,12 @@ This file is the hub — everything else is linked from here:
 
 - [`docs/workflow.md`](docs/workflow.md) — fresh-machine → running workflow.
 - [`skills/`](skills/) — installable domain skills (`pnpm skills:install`):
-  obsidian-arrow-sandbox, arrow-js-obsidian-templates, arrow-js-obsidian-patterns,
-  arrow-js-obsidian-porting (sandbox→plugin parity check), obsidian-arrow-maintenance
-  (updating an existing project).
+  - `obsidian-arrow-sandbox` — running the sandbox, CSS scoping, porting basics.
+  - `obsidian-arrow-stories` — **component + story authoring workflow**: `defineStories` API, variants, children, status flag, DRY patterns, utilities.
+  - `arrow-js-obsidian-templates` — Arrow v1.0.6 template syntax + footguns.
+  - `arrow-js-obsidian-patterns` — icons, CSS scoping, lifecycle, reactive state.
+  - `arrow-js-obsidian-porting` — sandbox→plugin parity check (`component-hash`).
+  - `obsidian-arrow-maintenance` — updating an existing project.
 - [`docs/prompts/`](docs/prompts/) — copy-paste agent prompts: `agent-setup.md`
   (scaffold + orient) and `update-existing.md` (update tooling + skills, keep src).
 
@@ -80,9 +83,17 @@ in `boundary()`.
 
 ## Conventions
 
-- Add a demo by creating a co-located `*.stories.ts` next to the component (see
-  README "Add a story"); it appears at `/components/<slug>` automatically.
-  Browse Obsidian tokens/classes at `/reference`.
+- **Check `/reference/classes` first** — Obsidian has semantic classes for most
+  common patterns. Use them before writing any custom CSS.
+- **Use `oas-*` utilities second** (`src/utilities.css`) — flex, gap, padding,
+  margin, typography, border, overflow helpers built on Obsidian's token scale.
+  Prefer `class="oas-flex oas-gap-2"` over `style="display:flex;gap:8px"`.
+- **Custom CSS last** — only when Obsidian has no class and utilities don't cover
+  it. Scope under container + element type, use `var(--…)` tokens for values.
+- Add a story by creating a co-located `*.stories.ts` next to the component —
+  it appears at `/components/<slug>` automatically. See the `obsidian-arrow-stories`
+  skill for the full `defineStories` API (variants, children, status, notes).
+  Browse live tokens at `/reference`, curated classes at `/reference/classes`.
 
 ## CSS scoping
 

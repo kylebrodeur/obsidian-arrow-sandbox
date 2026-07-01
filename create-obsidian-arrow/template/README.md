@@ -91,7 +91,8 @@ skills under [`skills/`](skills/) — it's a skill marketplace. Scaffolds **don'
 vendor copies**; they pull from this published repo, so installs are always
 current.
 
-- `obsidian-arrow-sandbox` — running and using this sandbox, and porting to a plugin.
+- `obsidian-arrow-sandbox` — running and using this sandbox, CSS scoping, porting basics.
+- `obsidian-arrow-stories` — **component + story authoring workflow**: the complete `defineStories` API (variants, children, status flag, notes), DRY patterns, utility classes, story viewing, and how to structure sub-components.
 - `arrow-js-obsidian-templates` — Arrow v1.0.6 template rules + footguns.
 - `arrow-js-obsidian-patterns` — integration patterns: icons (Lucide / data-icon
   sweep), CSS scoping vs Obsidian globals, mount/unmount lifecycle, reactive state.

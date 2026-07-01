@@ -55,9 +55,15 @@ Then point the agent at [`AGENTS.md`](../AGENTS.md), or brief a fresh agent with
 ## Build → verify → port loop
 
 ```sh
-# add a component in src/components/
-# co-locate a *.stories.ts to make it appear at /components/<slug>
-pnpm dev          # iterate with HMR; story viewer at /components, token/class index at /reference
+# 1. Check /reference/classes in the running sandbox — does Obsidian have a class
+#    for your pattern? Use it before writing custom CSS.
+# 2. Add src/components/MyThing.ts (Arrow component)
+# 3. Add src/components/MyThing.stories.ts (co-located story file)
+pnpm dev          # iterate with HMR
+#    /components          → index of all discovered stories
+#    /components/my-thing → story for MyThing
+#    /reference           → live Obsidian token reference
+#    /reference/classes   → curated class catalog with live previews
 pnpm run ci       # biome + typecheck + tests + build before trusting it
 ```
 
@@ -65,10 +71,14 @@ Always confirm the actual render in the browser — Arrow's footguns surface onl
 at render, so a passing `tsc` is not proof a component works. See the footguns in
 [`AGENTS.md`](../AGENTS.md) and the `arrow-js-obsidian-templates` skill.
 
-**Port a component into a plugin:** copy the file into the plugin's view directory
-and mount it from `ItemView.onOpen()` via `template(this.contentEl)`. If it uses
-`boundary()`/async components, add `@arrow-js/framework` to the plugin and the
-side-effect `import '@arrow-js/framework'`. Leave `src/sandbox/*` behind.
+For the complete story authoring workflow (`defineStories` API, variants, children,
+status flag, DRY patterns) see the `obsidian-arrow-stories` skill.
+
+**Port a component into a plugin:** copy the component file and `src/utilities.css`
+(once, shared by all ports) into the plugin. Mount from `ItemView.onOpen()` via
+`template(this.contentEl)`. If it uses `boundary()`/async, add
+`@arrow-js/framework` and `import '@arrow-js/framework'`. Leave `src/sandbox/*`
+behind.
 
 ## Scaffold vs. clone
 
