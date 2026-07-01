@@ -30,7 +30,8 @@ Then:
                     # committed; it's Obsidian's proprietary CSS). Auto-detect is
                     # macOS-only; on Windows/WSL pass --path <obsidian.asar|app.css>
                     # or set OBSIDIAN_ASAR=<path>.
-  pnpm dev          # open the printed URL: / is the examples index, /example the demo.
+  pnpm dev          # open the printed URL: / is home, /components the story viewer,
+                    # /reference the Obsidian token/class index.
                     # The toolbar slider/presets + edge drag handle resize the panel.
   pnpm skills:install --yes   # install all agent skills non-interactively, pulled
                               # from the published repo (not vendored) — this loads
@@ -68,8 +69,9 @@ CONVENTIONS
   only when Obsidian has no class, scoped under a container class + element type
   (e.g. `.my-panel button.my-action`) so it beats Obsidian's global button rule.
 - Sandbox-only chrome lives in src/sandbox/* — it does NOT port to a plugin.
-- Add a demo by exporting an Arrow component and registering it in
-  src/examples/registry.ts (it shows on the index and at its own route).
+- Add a demo by creating a co-located `*.stories.ts` next to the component (see
+  README "Add a story"); it appears at `/components/<slug>` automatically.
+  Browse Obsidian tokens/classes at `/reference`.
 
 VERIFY BEFORE CLAIMING DONE
 - `pnpm typecheck && pnpm test && pnpm lint` (or `pnpm run ci` for the full chain).
@@ -89,7 +91,7 @@ Refresh tooling later with `npx create-obsidian-arrow update` (preserves src/),
 update skills with `pnpm skills:update`. See the obsidian-arrow-maintenance skill.
 
 Start by scaffolding, running setup steps, then read AGENTS.md and confirm
-`pnpm dev` renders /example correctly. Report what you see.
+`pnpm dev` renders correctly at /components and /reference. Report what you see.
 ```
 
 ---

@@ -58,6 +58,21 @@ element type (e.g. `.oas-frame button.oas-x`) so it beats Obsidian's global
 `button:not(.clickable-icon)` rule. Sandbox-only chrome lives in
 `src/sandbox/sandbox.css`.
 
+To add a story, create a co-located `*.stories.ts` next to the component — it
+appears at `/components/<slug>` in the story viewer automatically:
+
+```ts
+import { defineStories } from "../viewer/stories";
+import { MyThing } from "./MyThing";
+
+export default defineStories({
+	description: "What it demonstrates.",
+	variants: { default: () => MyThing() },
+});
+```
+
+Browse all `var(--)` tokens and curated Obsidian pattern classes at `/reference`.
+
 For the template-writing rules and Arrow's hard footguns, use the companion
 skill **arrow-js-obsidian-templates**.
 

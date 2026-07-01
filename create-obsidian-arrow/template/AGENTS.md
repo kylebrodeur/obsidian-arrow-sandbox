@@ -78,6 +78,12 @@ events via `@event` (`@click="${fn}"`), keyed lists via
 `html\`…\`.key(id)`, async sections via `component(asyncFn, { fallback })` wrapped
 in `boundary()`.
 
+## Conventions
+
+- Add a demo by creating a co-located `*.stories.ts` next to the component (see
+  README "Add a story"); it appears at `/components/<slug>` automatically.
+  Browse Obsidian tokens/classes at `/reference`.
+
 ## CSS scoping
 
 - Use Obsidian's own classes (`.setting-item`, `.clickable-icon`,

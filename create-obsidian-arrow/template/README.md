@@ -125,6 +125,38 @@ different project root, e.g. an outer repo a scaffold is nested in), `--global`
 forms `SKILLS_AGENT` / `SKILLS_PROJECT_DIR` / `SKILLS_GLOBAL` (and
 `SKIP_SKILLS_INSTALL=1`) influence *that* path.
 
+## Component viewer & reference
+
+**Component viewer (`/components`):** a Storybook-style browser for sandbox
+components. Co-locate a `*.stories.ts` file next to any component and it appears
+in the sidebar and on Home automatically. Stories support named variants,
+drill-in via `children` slugs, and a derived src path shown in the viewer — all
+discovered at build time via `import.meta.glob`.
+
+**Reference index (`/reference`):** all `var(--)` tokens parsed live from
+`app.css`, grouped by category (Size & spacing, Radius, Colors, …) with color
+swatches, size bars, a filter input, theme-aware resolved values, and a copy
+button. `/reference/classes` is a curated catalog of Obsidian pattern classes
+with live previews.
+
+### Add a story
+
+Create `src/components/MyThing.stories.ts` next to the component:
+
+```ts
+import { defineStories } from "../viewer/stories";
+import { MyThing } from "./MyThing";
+
+export default defineStories({
+	description: "What it demonstrates.",
+	variants: { default: () => MyThing() },
+});
+```
+
+It appears in the sidebar and on Home automatically; the src path shown in the
+viewer is derived from the file location. Stories are sandbox-only — they never
+port to the plugin.
+
 ## Porting a component into the plugin
 
 Components use only Obsidian classes + `var(--…)` tokens and mount via

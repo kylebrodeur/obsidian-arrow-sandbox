@@ -1,13 +1,12 @@
 import { component, html, reactive } from "@arrow-js/core";
 import type { ArrowTemplate } from "@arrow-js/core";
-import { ExamplesIndex } from "../examples/ExamplesIndex";
-import { examples } from "../examples/registry";
+import { stories } from "../viewer/discovery";
 import { layoutState } from "./layout";
 import { themeState } from "./theme";
 
 /**
  * Sandbox landing page at "/": a readiness check + getting-started commands +
- * the examples list. Sandbox chrome — does not port to a plugin.
+ * the components list. Sandbox chrome — does not port to a plugin.
  *
  * The readiness probe catches the #1 fresh-machine gotcha: running `pnpm dev`
  * before `pnpm pull-css` leaves app.css unloaded, so every `var(--…)` token is
@@ -101,6 +100,32 @@ export const Home = component((): ArrowTemplate => {
 					`.key(step.cmd)
 			)}
 		</div>
-		${ExamplesIndex(examples)}
+		<div class="setting-item setting-item-heading">
+			<div class="setting-item-info">
+				<div class="setting-item-name">Components</div>
+				<div class="setting-item-description">
+					Stories rendered with real Obsidian styling — <a href="/reference">token & class reference</a>.
+				</div>
+			</div>
+		</div>
+		${stories.map(
+			(story) => html`
+			<div class="setting-item">
+				<div class="setting-item-info">
+					<div class="setting-item-name">
+						<a href="${`/components/${story.slug}`}">${story.title}</a>
+					</div>
+					${
+						story.description
+							? html`<div class="setting-item-description">${story.description}</div>`
+							: ""
+					}
+				</div>
+				<div class="setting-item-control">
+					<a class="mod-cta oas-open-link" href="${`/components/${story.slug}`}">Open</a>
+				</div>
+			</div>
+		`
+		)}
 	`;
 });

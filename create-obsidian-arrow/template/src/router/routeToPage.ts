@@ -1,43 +1,32 @@
 import { html } from "@arrow-js/core";
 import type { ArrowExpression } from "@arrow-js/core";
-import { findExample } from "../examples/registry";
 import { Home } from "../sandbox/home";
+import { ClassesPage } from "../viewer/ClassesPage";
+import { StoryPage } from "../viewer/StoryPage";
+import { TokensPage } from "../viewer/TokensPage";
+import { findStory, stories } from "../viewer/discovery";
+import { ViewerSidebar } from "../viewer/sidebar";
 
 /**
- * Single route resolver, shared by every entry point. Returns the page status,
- * title (metadata), and Arrow view together — the same shape the Arrow Vite
- * scaffold uses, so a future SSR/hydration lane can call this identically on
- * both server and client. The client router (./client.ts) wraps the view in the
- * sandbox Frame and sets document.title from this.
+ * Single route resolver, shared by every entry point (Arrow scaffold shape, so
+ * a future SSR lane could call it identically). Pages may carry a sidebar
+ * (rendered outside the pane) and routes may resolve to a redirect, which the
+ * client router applies via history.replaceState.
  */
 export interface Page {
 	status: number;
 	title: string;
 	view: ArrowExpression;
+	sidebar?: ArrowExpression;
+}
+
+export interface Redirect {
+	redirect: string;
 }
 
 const APP_NAME = "Arrow Sandbox";
 
-export function routeToPage(url: string): Page {
-	const { pathname } = new URL(url, window.location.origin);
-
-	if (pathname === "/" || pathname === "") {
-		return {
-			status: 200,
-			title: APP_NAME,
-			view: Home(),
-		};
-	}
-
-	const match = findExample(pathname);
-	if (match) {
-		return {
-			status: 200,
-			title: `${match.label} · ${APP_NAME}`,
-			view: match.view(),
-		};
-	}
-
+function notFound(pathname: string): Page {
 	return {
 		status: 404,
 		title: `Not found · ${APP_NAME}`,
@@ -47,11 +36,64 @@ export function routeToPage(url: string): Page {
 					<div class="setting-item-info">
 						<div class="setting-item-name">Not found</div>
 						<div class="setting-item-description">
-							No route for <code>${pathname}</code>. <a href="/">Back to examples</a>.
+							No route for <code>${pathname}</code>. <a href="/">Back home</a>.
 						</div>
 					</div>
 				</div>
 			</div>
 		`,
 	};
+}
+
+export function routeToPage(url: string): Page | Redirect {
+	const { pathname, searchParams } = new URL(url, window.location.origin);
+
+	if (pathname === "/" || pathname === "") {
+		return { status: 200, title: APP_NAME, view: Home() };
+	}
+
+	if (pathname === "/example") {
+		return { redirect: "/components/settings-panel" };
+	}
+
+	if (pathname === "/components" || pathname === "/components/") {
+		const first = stories[0];
+		return first ? { redirect: `/components/${first.slug}` } : notFound(pathname);
+	}
+
+	const storyMatch = pathname.match(/^\/components\/([^/]+)$/);
+	if (storyMatch) {
+		const story = findStory(storyMatch[1]);
+		if (!story) {
+			return { ...notFound(pathname), sidebar: ViewerSidebar(pathname) };
+		}
+		const requested = searchParams.get("variant");
+		const variantName = requested ?? Object.keys(story.variants)[0];
+		return {
+			status: story.variants[variantName] ? 200 : 404,
+			title: `${story.title} · ${APP_NAME}`,
+			view: StoryPage(story, variantName),
+			sidebar: ViewerSidebar(`/components/${story.slug}`),
+		};
+	}
+
+	if (pathname === "/reference") {
+		return {
+			status: 200,
+			title: `Tokens · ${APP_NAME}`,
+			view: TokensPage(),
+			sidebar: ViewerSidebar(pathname),
+		};
+	}
+
+	if (pathname === "/reference/classes") {
+		return {
+			status: 200,
+			title: `Classes · ${APP_NAME}`,
+			view: ClassesPage(),
+			sidebar: ViewerSidebar(pathname),
+		};
+	}
+
+	return notFound(pathname);
 }
