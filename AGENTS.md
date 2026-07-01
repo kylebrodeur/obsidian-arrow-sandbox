@@ -115,3 +115,9 @@ mount it from `ItemView.onOpen()` via `template(this.contentEl)`. If it uses
 `boundary()`/async components, add `@arrow-js/framework` to the plugin and the
 `import '@arrow-js/framework'` side-effect import. Strip any sandbox chrome
 (`src/sandbox/*`) — that stays here.
+
+**Bring `src/utilities.css` along.** Components may use `oas-`-prefixed utility
+classes (flex, gap, padding, typography, border — all built on Obsidian's token
+scale). Copy `src/utilities.css` once into the plugin's styles directory and
+import it there. The `oas-` prefix guarantees no conflict with Obsidian selectors.
+Re-copy when the sandbox file changes (the porting-parity skill covers this).

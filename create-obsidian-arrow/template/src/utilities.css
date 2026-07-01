@@ -1,0 +1,205 @@
+/*
+ * Portable utility classes for Obsidian Arrow components.
+ *
+ * These travel with component ports into the plugin — copy this file once into
+ * the plugin's styles directory and import it alongside your component CSS.
+ * All classes are prefixed `oas-` to avoid any conflict with Obsidian's own
+ * selectors. Values use Obsidian's CSS custom property scale so they track the
+ * active theme automatically.
+ */
+
+/* ── Layout ──────────────────────────────────────────────────── */
+.oas-flex {
+	display: flex;
+}
+.oas-inline-flex {
+	display: inline-flex;
+}
+.oas-flex-col {
+	flex-direction: column;
+}
+.oas-flex-wrap {
+	flex-wrap: wrap;
+}
+.oas-items-start {
+	align-items: flex-start;
+}
+.oas-items-center {
+	align-items: center;
+}
+.oas-items-end {
+	align-items: flex-end;
+}
+.oas-items-baseline {
+	align-items: baseline;
+}
+.oas-justify-start {
+	justify-content: flex-start;
+}
+.oas-justify-center {
+	justify-content: center;
+}
+.oas-justify-end {
+	justify-content: flex-end;
+}
+.oas-justify-between {
+	justify-content: space-between;
+}
+.oas-grow {
+	flex: 1;
+}
+.oas-shrink-0 {
+	flex-shrink: 0;
+}
+
+/* ── Spacing (Obsidian 4-px step scale) ─────────────────────── */
+.oas-gap-1 {
+	gap: var(--size-4-1);
+}
+.oas-gap-2 {
+	gap: var(--size-4-2);
+}
+.oas-gap-3 {
+	gap: var(--size-4-3);
+}
+.oas-gap-4 {
+	gap: var(--size-4-4);
+}
+.oas-p-1 {
+	padding: var(--size-4-1);
+}
+.oas-p-2 {
+	padding: var(--size-4-2);
+}
+.oas-p-3 {
+	padding: var(--size-4-3);
+}
+.oas-p-4 {
+	padding: var(--size-4-4);
+}
+.oas-px-2 {
+	padding-inline: var(--size-4-2);
+}
+.oas-px-3 {
+	padding-inline: var(--size-4-3);
+}
+.oas-py-1 {
+	padding-block: var(--size-4-1);
+}
+.oas-py-2 {
+	padding-block: var(--size-4-2);
+}
+.oas-py-3 {
+	padding-block: var(--size-4-3);
+}
+.oas-mt-1 {
+	margin-top: var(--size-4-1);
+}
+.oas-mt-2 {
+	margin-top: var(--size-4-2);
+}
+.oas-mt-3 {
+	margin-top: var(--size-4-3);
+}
+.oas-mb-1 {
+	margin-bottom: var(--size-4-1);
+}
+.oas-mb-2 {
+	margin-bottom: var(--size-4-2);
+}
+.oas-mb-3 {
+	margin-bottom: var(--size-4-3);
+}
+.oas-ml-auto {
+	margin-left: auto;
+}
+
+/* ── Sizing ──────────────────────────────────────────────────── */
+.oas-w-full {
+	width: 100%;
+}
+.oas-min-w-0 {
+	min-width: 0;
+}
+.oas-min-h-0 {
+	min-height: 0;
+}
+
+/* ── Typography ──────────────────────────────────────────────── */
+.oas-text-xs {
+	font-size: var(--font-ui-smaller);
+}
+.oas-text-sm {
+	font-size: var(--font-ui-small);
+}
+.oas-text-md {
+	font-size: var(--font-ui-medium);
+}
+.oas-font-medium {
+	font-weight: var(--font-medium);
+}
+.oas-font-semibold {
+	font-weight: var(--font-semibold);
+}
+.oas-font-mono {
+	font-family: var(--font-monospace);
+}
+.oas-leading-1 {
+	line-height: 1;
+}
+.oas-text-normal {
+	color: var(--text-normal);
+}
+.oas-text-muted {
+	color: var(--text-muted);
+}
+.oas-text-faint {
+	color: var(--text-faint);
+}
+.oas-text-accent {
+	color: var(--text-accent);
+}
+.oas-text-success {
+	color: var(--text-success);
+}
+.oas-text-error {
+	color: var(--text-error);
+}
+
+/* ── Overflow ────────────────────────────────────────────────── */
+.oas-truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.oas-overflow-hidden {
+	overflow: hidden;
+}
+.oas-overflow-auto {
+	overflow: auto;
+}
+
+/* ── Border ──────────────────────────────────────────────────── */
+.oas-border {
+	border: 1px solid var(--background-modifier-border);
+}
+.oas-border-b {
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+.oas-border-t {
+	border-top: 1px solid var(--background-modifier-border);
+}
+.oas-rounded-s {
+	border-radius: var(--radius-s);
+}
+.oas-rounded-m {
+	border-radius: var(--radius-m);
+}
+
+/* ── Interaction ─────────────────────────────────────────────── */
+.oas-cursor-pointer {
+	cursor: pointer;
+}
+.oas-select-none {
+	user-select: none;
+}

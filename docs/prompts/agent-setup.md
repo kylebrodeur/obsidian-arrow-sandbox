@@ -83,8 +83,11 @@ PORTING TO A PLUGIN
 Copy the component file into the plugin's view dir and mount from
 ItemView.onOpen() via `template(this.contentEl)`. If it uses boundary()/async
 components, add @arrow-js/framework to the plugin and the side-effect
-`import '@arrow-js/framework'`. Leave src/sandbox/* behind. Guard against drift
-with the porting-parity check (see the arrow-js-obsidian-porting skill).
+`import '@arrow-js/framework'`. Also copy src/utilities.css into the plugin once
+(all ported components share it) — components may use oas-* utility classes
+(flex, gap, padding, text, border helpers built on Obsidian's token scale).
+Leave src/sandbox/* behind. Guard against drift with the porting-parity check
+(see the arrow-js-obsidian-porting skill).
 
 MAINTENANCE (existing project)
 Refresh tooling later with `npx create-obsidian-arrow update` (preserves src/),

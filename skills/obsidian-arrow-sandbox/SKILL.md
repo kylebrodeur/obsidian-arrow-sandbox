@@ -91,4 +91,8 @@ typecheck passing is **not** proof a component works.
 Copy the component file into the plugin's view directory and mount it from
 `ItemView.onOpen()` via `template(this.contentEl)`. If it uses `boundary()` /
 async components, add `@arrow-js/framework` to the plugin and the side-effect
-`import '@arrow-js/framework'`. Leave sandbox chrome (`src/sandbox/*`) behind.
+`import '@arrow-js/framework'`. Also copy `src/utilities.css` into the plugin
+once — components may use `oas-`-prefixed utility classes (flex, gap, padding,
+typography, border helpers built on Obsidian's token scale). The prefix prevents
+any conflict with Obsidian's selectors; all ported components share one copy.
+Leave sandbox chrome (`src/sandbox/*`) behind.

@@ -165,6 +165,11 @@ copy the component file into the plugin's view directory and mount it from
 `onOpen()`. If it uses `boundary()`/async components, add `@arrow-js/framework`
 to the plugin and the `import '@arrow-js/framework'` side-effect import.
 
+Also copy `src/utilities.css` into the plugin once — components may use `oas-`
+utility classes (flex, gap, padding, typography, border helpers built on
+Obsidian's token scale). The `oas-` prefix means no conflicts with Obsidian's
+own selectors. All ported components in a plugin share one copy of this file.
+
 ## Arrow v1.0.6 footguns (learned the hard way)
 
 These are enforced/encoded so they don't regress:

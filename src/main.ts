@@ -4,6 +4,7 @@ import "@arrow-js/framework";
 
 import { startRouter } from "./router/client";
 import { applyTheme } from "./sandbox/theme";
+import "./utilities.css";
 import "./sandbox/sandbox.css";
 
 applyTheme();

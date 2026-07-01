@@ -11,6 +11,22 @@ or a port silently diverges. This makes components **content-addressed**: a
 canonical hash of the component's portable body must match on both sides, the
 same idea as "never hand-edit generated artifacts."
 
+## Copy utilities.css with the port
+
+`src/utilities.css` is a small (~80-line) set of `oas-`-prefixed layout, spacing,
+typography, and border utilities built on Obsidian's CSS custom property scale.
+Components may use these classes — they are **portable by design**. When porting
+a component, copy this file into the plugin's styles directory and import it:
+
+```ts
+// In the plugin's entry (or the view file's companion CSS import):
+import "./utilities.css";   // or however the plugin loads CSS
+```
+
+The `oas-` prefix means it won't conflict with any Obsidian selector. Copy it
+once per plugin — all ported components share it. If the sandbox adds new utility
+classes, re-copy the file.
+
 ## Write portable components
 
 So the body is byte-identical across sandbox and plugin and only the *mount site*
