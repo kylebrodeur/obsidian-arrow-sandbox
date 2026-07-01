@@ -63,10 +63,13 @@ export type ValueKind = "color" | "length" | "other";
 
 export function classifyValue(resolved: string): ValueKind {
 	const value = resolved.trim();
-	if (/^#[0-9a-f]{3,8}$/i.test(value) || /^(rgb|rgba|hsl|hsla)\(/i.test(value)) {
+	if (
+		/^#([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(value) ||
+		/^(rgb|rgba|hsl|hsla)\(/i.test(value)
+	) {
 		return "color";
 	}
-	if (/^-?\d+(\.\d+)?(px|em|rem)$/.test(value)) {
+	if (value === "0" || /^-?\d+(\.\d+)?(px|em|rem|%|ch|vw|vh|vmin|vmax|pt)$/.test(value)) {
 		return "length";
 	}
 	return "other";

@@ -48,6 +48,11 @@ test("classifyValue detects colors, lengths, other", () => {
 	assert.equal(classifyValue("0.875em"), "length");
 	assert.equal(classifyValue("inherit"), "other");
 	assert.equal(classifyValue("var(--x)"), "other");
+	assert.equal(classifyValue("100%"), "length");
+	assert.equal(classifyValue("100vw"), "length");
+	assert.equal(classifyValue("0"), "length");
+	assert.equal(classifyValue("2pt"), "length");
+	assert.equal(classifyValue("#abc12"), "other");
 });
 
 test("filterTokens is a case-insensitive substring match; blank query passes all", () => {
