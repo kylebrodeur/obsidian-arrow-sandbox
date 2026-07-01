@@ -68,10 +68,11 @@ node create-obsidian-arrow/index.mjs update ../my-app   # update
 ## What you get
 
 A full sandbox: client-only Vite + TS, `@arrow-js/core` + `@arrow-js/framework`
-(no SSR), `routeToPage` + Navigation-API router with an `/example` demo, Biome +
-husky pre-commit + `node:test` + GitHub Actions CI, a `skills:install` that pulls
-the agent skills from the published repo, and the `pull-css` script that extracts
-Obsidian's `app.css`.
+(no SSR), `routeToPage` + Navigation-API router, a Storybook-style component
+viewer at `/components` (co-locate `*.stories.ts` to add stories), a live token
+and class reference at `/reference`, Biome + husky pre-commit + `node:test` +
+GitHub Actions CI, a `skills:install` that pulls the agent skills from the
+published repo, and the `pull-css` script that extracts Obsidian's `app.css`.
 
 ## Maintaining the template
 

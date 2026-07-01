@@ -25,7 +25,8 @@ pnpm pull-css                            # macOS: auto-detects /Applications/Obs
                                          #        or  OBSIDIAN_ASAR=<path> pnpm pull-css
 
 # 4. Run it
-pnpm dev                                 # open the printed URL — / is the index, /example the demo
+pnpm dev                                 # open the printed URL — / is home, /components the story
+                                         # viewer, /reference the token/class index
 ```
 
 `public/app.css` is **git-ignored and never shipped** (it's Obsidian's proprietary
@@ -54,8 +55,9 @@ Then point the agent at [`AGENTS.md`](../AGENTS.md), or brief a fresh agent with
 ## Build → verify → port loop
 
 ```sh
-# add a component in src/components/, register it in src/examples/registry.ts
-pnpm dev          # iterate with HMR
+# add a component in src/components/
+# co-locate a *.stories.ts to make it appear at /components/<slug>
+pnpm dev          # iterate with HMR; story viewer at /components, token/class index at /reference
 pnpm run ci       # biome + typecheck + tests + build before trusting it
 ```
 

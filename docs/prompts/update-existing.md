@@ -60,7 +60,7 @@ STEPS (in order)
 
 7. Verify
    - pnpm run ci          (biome + typecheck + tests + build)
-   - pnpm dev             and confirm /example renders with a clean console
+   - pnpm dev             and confirm /components and /reference render with a clean console
 
 REPORT
 - What `update` changed, which skills are now installed and where, the pull-css
