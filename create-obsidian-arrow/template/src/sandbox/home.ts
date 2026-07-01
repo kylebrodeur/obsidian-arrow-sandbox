@@ -4,18 +4,10 @@ import { stories } from "../viewer/discovery";
 import { layoutState } from "./layout";
 import { themeState } from "./theme";
 
-/**
- * Sandbox landing page at "/": a readiness check + getting-started commands +
- * the components list. Sandbox chrome — does not port to a plugin.
- *
- * The readiness probe catches the #1 fresh-machine gotcha: running `pnpm dev`
- * before `pnpm pull-css` leaves app.css unloaded, so every `var(--…)` token is
- * empty. We detect that by reading the computed value of a known token.
- */
 const probe = reactive({ tick: 0 });
 
 function stylingLoaded(): boolean {
-	const generation = probe.tick; // reactive dependency; Re-check bumps it
+	const generation = probe.tick;
 	const style = getComputedStyle(document.body);
 	return (
 		generation >= 0 &&
@@ -28,6 +20,11 @@ function recheck(): void {
 	probe.tick++;
 }
 
+const gettingStarted = reactive({ expanded: false });
+
+// Pre-allocate one state per story; stories is static (eager glob), so this runs once.
+const storyStates = new Map(stories.map((s) => [s.slug, reactive({ expanded: false })]));
+
 const GETTING_STARTED = [
 	{ cmd: "pnpm pull-css", note: "extract Obsidian's app.css — run once (macOS auto-detect)" },
 	{ cmd: "pnpm dev", note: "this dev server (Vite + HMR)" },
@@ -35,9 +32,13 @@ const GETTING_STARTED = [
 	{ cmd: "pnpm run ci", note: "biome + typecheck + tests + build" },
 ];
 
+const VIEWS = [
+	{ label: "Components", path: "/components", note: "Component story viewer" },
+	{ label: "Tokens", path: "/reference", note: "CSS custom property reference" },
+	{ label: "Classes", path: "/reference/classes", note: "Obsidian class catalog" },
+];
+
 export const Home = component((): ArrowTemplate => {
-	// Re-probe shortly after mount, in case app.css finished loading after the
-	// first paint (stylesheets load async).
 	setTimeout(recheck, 250);
 
 	return html`
@@ -78,54 +79,109 @@ export const Home = component((): ArrowTemplate => {
 					</div>
 				</div>
 			</div>
+		</div>
 
+		<div class="${() => (gettingStarted.expanded ? "oas-card is-expanded" : "oas-card")}">
+			<div
+				class="oas-card-header"
+				@click="${() => {
+					gettingStarted.expanded = !gettingStarted.expanded;
+				}}"
+			>
+				<span class="oas-card-title">Getting started</span>
+				<span class="oas-card-chevron">›</span>
+			</div>
+			<div class="oas-card-body">
+				<div class="oas-settings">
+					${GETTING_STARTED.map((step) =>
+						html`
+							<div class="setting-item">
+								<div class="setting-item-info">
+									<div class="setting-item-name" style="font-family: var(--font-monospace);">
+										${step.cmd}
+									</div>
+									<div class="setting-item-description">${step.note}</div>
+								</div>
+							</div>
+						`.key(step.cmd)
+					)}
+				</div>
+				<p class="oas-card-note">
+					See AGENTS.md + docs/ for the full flow; agent prompts in docs/prompts/.
+				</p>
+			</div>
+		</div>
+
+		<div class="oas-settings">
 			<div class="setting-item setting-item-heading">
 				<div class="setting-item-info">
-					<div class="setting-item-name">Getting started</div>
-					<div class="setting-item-description">
-						See AGENTS.md + docs/ for the full flow; agent prompts in docs/prompts/.
-					</div>
+					<div class="setting-item-name">Views</div>
+					<div class="setting-item-description">Main pages in this sandbox.</div>
 				</div>
 			</div>
-			${GETTING_STARTED.map((step) =>
+			${VIEWS.map((view) =>
 				html`
-						<div class="setting-item">
-							<div class="setting-item-info">
-								<div class="setting-item-name" style="font-family: var(--font-monospace);">
-									${step.cmd}
-								</div>
-								<div class="setting-item-description">${step.note}</div>
+					<div class="setting-item">
+						<div class="setting-item-info">
+							<div class="setting-item-name">
+								<a href="${view.path}">${view.label}</a>
 							</div>
+							<div class="setting-item-description">${view.note}</div>
 						</div>
-					`.key(step.cmd)
+						<div class="setting-item-control">
+							<a class="mod-cta oas-open-link" href="${view.path}">Open</a>
+						</div>
+					</div>
+				`.key(view.label)
 			)}
 		</div>
-		<div class="setting-item setting-item-heading">
-			<div class="setting-item-info">
-				<div class="setting-item-name">Components</div>
-				<div class="setting-item-description">
-					Stories rendered with real Obsidian styling — <a href="/reference">token & class reference</a>.
+
+		<div class="oas-settings">
+			<div class="setting-item setting-item-heading">
+				<div class="setting-item-info">
+					<div class="setting-item-name">Component Gallery</div>
+					<div class="setting-item-description">
+						All discovered stories — expand to see details and sub-components.
+					</div>
 				</div>
 			</div>
 		</div>
-		${stories.map(
-			(story) => html`
-			<div class="setting-item">
-				<div class="setting-item-info">
-					<div class="setting-item-name">
-						<a href="${`/components/${story.slug}`}">${story.title}</a>
+		<div class="oas-gallery">
+			${stories.map((story) => {
+				const state = storyStates.get(story.slug) ?? reactive({ expanded: false });
+				const cardClass = (): string => (state.expanded ? "oas-card is-expanded" : "oas-card");
+				const storyPath = `/components/${story.slug}`;
+				const childrenRows = story.children.map(
+					(slug) => html`<a class="oas-child" href="${`/components/${slug}`}">${slug}</a>`
+				);
+				return html`
+					<div class="${cardClass}">
+						<div
+							class="oas-card-header"
+							@click="${() => {
+								state.expanded = !state.expanded;
+							}}"
+						>
+							<span class="oas-card-title">${story.title}</span>
+							<span class="oas-card-chevron">›</span>
+						</div>
+						<div class="oas-card-body">
+							${story.description ? html`<p class="oas-card-desc">${story.description}</p>` : ""}
+							${
+								story.children.length > 0
+									? html`<div class="oas-card-children">
+										<span class="oas-card-children-label">Sub-components:</span>
+										${childrenRows}
+									</div>`
+									: ""
+							}
+							<div class="oas-card-actions">
+								<a class="mod-cta oas-open-link" href="${storyPath}">Open →</a>
+							</div>
+						</div>
 					</div>
-					${
-						story.description
-							? html`<div class="setting-item-description">${story.description}</div>`
-							: ""
-					}
-				</div>
-				<div class="setting-item-control">
-					<a class="mod-cta oas-open-link" href="${`/components/${story.slug}`}">Open</a>
-				</div>
-			</div>
-		`
-		)}
+				`.key(story.slug);
+			})}
+		</div>
 	`;
 });

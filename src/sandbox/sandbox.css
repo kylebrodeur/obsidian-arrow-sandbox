@@ -130,6 +130,93 @@ body {
 	opacity: 0.5;
 }
 
+/* Collapsible card — Getting Started accordion and Component Gallery entries. */
+.oas-card {
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.oas-card-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2) var(--size-4-3);
+	cursor: pointer;
+	font-size: var(--font-ui-small);
+	font-weight: var(--font-medium);
+	color: var(--text-normal);
+	user-select: none;
+}
+
+.oas-card-header:hover {
+	background: var(--background-modifier-hover);
+}
+
+.oas-card-title {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.oas-card-chevron {
+	flex-shrink: 0;
+	color: var(--text-faint);
+	transition: transform 0.15s;
+	font-size: var(--font-ui-medium);
+	line-height: 1;
+}
+
+.oas-card.is-expanded .oas-card-chevron {
+	transform: rotate(90deg);
+}
+
+.oas-card-body {
+	display: none;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.oas-card.is-expanded .oas-card-body {
+	display: block;
+}
+
+.oas-card-desc {
+	margin: 0;
+	padding: var(--size-4-2) var(--size-4-3);
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+.oas-card-note {
+	margin: 0;
+	padding: 0 var(--size-4-3) var(--size-4-2);
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+.oas-card-children {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: var(--size-4-1);
+	padding: var(--size-4-1) var(--size-4-3);
+}
+
+.oas-card-children-label {
+	color: var(--text-faint);
+	font-size: var(--font-ui-smaller);
+}
+
+.oas-card-actions {
+	padding: var(--size-4-2) var(--size-4-3);
+}
+
+/* Gallery: vertical stack of cards below the heading */
+.oas-gallery {
+	border-top: 1px solid var(--background-modifier-border);
+}
+
 /* Component viewer: sidebar (first child of the stage) + story page chrome. */
 .oas-shell nav.oas-sidebar {
 	flex: 0 0 220px;
